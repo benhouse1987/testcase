@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: jules # Changed from MindmapApplication to jules as per instruction
+      changes:
+        - createTable:
+            tableName: mind_map_node
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_mind_map_node_parent
+                    references: mind_map_node(id)
+              - column:
+                  name: description
+                  type: TEXT # Rich text can be long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: remarks
+                  type: TEXT # Rich text can be long
+                  constraints:
+                    nullable: true
+              - column:
+                  name: requirement_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: backend_developer
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: frontend_developer
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: tester
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: requirement_reference
+                  type: TEXT # Rich text can be long
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  defaultValue: "PENDING_TEST"
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: mind_map_node
+            indexName: idx_mind_map_node_parent_id
+            columns:
+              - column:
+                  name: parent_id
+        - createIndex:
+            tableName: mind_map_node
+            indexName: idx_mind_map_node_requirement_id
+            columns:
+              - column:
+                  name: requirement_id

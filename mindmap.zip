@@ -1,0 +1,1 @@
+{"timestamp":"2025-05-22T02:37:09.789+00:00","status":400,"error":"Bad Request","message":"Unknown dependency 'mybatis-plus' check project metadata","path":"/starter.zip"}
