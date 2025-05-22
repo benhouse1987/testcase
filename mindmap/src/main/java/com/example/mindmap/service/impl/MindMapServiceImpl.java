@@ -53,7 +53,7 @@ public class MindMapServiceImpl implements MindMapService {
     @Override
     public List<MindMapNodeDto> getMindMapByRequirementId(String requirementId) {
         if (!StringUtils.hasText(requirementId)) {
-            return List.of();
+            return java.util.Collections.emptyList();
         }
 
         QueryWrapper<MindMapNode> queryWrapper = new QueryWrapper<>();
@@ -63,7 +63,7 @@ public class MindMapServiceImpl implements MindMapService {
         List<MindMapNode> flatList = mindMapNodeMapper.selectList(queryWrapper);
 
         if (flatList.isEmpty()) {
-            return List.of();
+            return java.util.Collections.emptyList();
         }
 
         Map<Long, MindMapNodeDto> map = flatList.stream().map(node ->
