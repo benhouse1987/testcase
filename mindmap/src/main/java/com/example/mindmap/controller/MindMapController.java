@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.example.mindmap.dto.MindMapNodeDto; // Add this import
 
 @RestController
 @RequestMapping("/api/mindmap")
@@ -43,15 +44,12 @@ public class MindMapController {
     // Get all nodes for a specific requirement ID (forms a mind map)
     // GET /api/mindmap/requirements/{requirementId}/nodes
     @GetMapping("/requirements/{requirementId}/nodes")
-    public ResponseEntity<List<MindMapNode>> getMindMapByRequirementId(@PathVariable String requirementId) {
-        List<MindMapNode> nodes = mindMapService.getMindMapByRequirementId(requirementId);
-        if (nodes != null && !nodes.isEmpty()) {
-            return ResponseEntity.ok(nodes);
-        } else {
-            // Return OK with empty list if no nodes found for this requirement,
-            // or NotFound if that's more appropriate for your API design.
-            return ResponseEntity.ok(List.of());
-        }
+    // public ResponseEntity<List<MindMapNode>> getMindMapByRequirementId(@PathVariable String requirementId) { // Old
+    public ResponseEntity<List<MindMapNodeDto>> getMindMapByRequirementId(@PathVariable String requirementId) { // New
+        List<MindMapNodeDto> nodesTree = mindMapService.getMindMapByRequirementId(requirementId);
+        // No change needed here if nodesTree is an empty list for no data, 
+        // service layer already handles returning List.of()
+        return ResponseEntity.ok(nodesTree);
     }
 
     // Delete a node and all its children
