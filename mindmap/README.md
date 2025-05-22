@@ -1,73 +1,73 @@
-# Mind Map API
+# 思维导图 API
 
-A Spring Boot application for managing mind maps, particularly for test case organization.
+一个用于管理思维导图的 Spring Boot 应用，尤其适用于测试用例组织。
 
-## Features
-- Create and manage mind map nodes with rich text descriptions and remarks.
-- Hierarchical structure (nodes can have children).
-- Status management for nodes (PENDING_TEST, TESTED, CANCELLED) with automatic recalculation:
-    - Setting a node's status propagates to all its children.
-    - Parent node status updates based on the collective status of its children.
-- Query mind maps by requirement ID.
-- Sample data initialized via Liquibase.
+## 特性
+- 创建和管理具有富文本描述和备注的思维导图节点。
+- 层级结构（节点可以有子节点）。
+- 节点状态管理 (PENDING_TEST, TESTED, CANCELLED)，具有自动重新计算功能：
+    - 设置节点状态会传播到其所有子节点。
+    - 父节点状态会根据其子节点的集体状态进行更新。
+- 按需求 ID 查询思维导图。
+- 通过 Liquibase 初始化示例数据。
 
-## Running the Application
-1.  **Database Setup**:
-    *   Ensure you have a MySQL instance running.
-    *   Create a database named `testCase`.
-    *   Update `src/main/resources/application.properties` with your MySQL username and password:
+## 运行应用
+1.  **数据库设置**:
+    *   确保你有一个正在运行的 MySQL 实例。
+    *   创建一个名为 `testCase` 的数据库。
+    *   更新 `src/main/resources/application.properties` 文件，填入你的 MySQL 用户名和密码：
         ```properties
         spring.datasource.url=jdbc:mysql://localhost:3306/testCase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-        spring.datasource.username=your_mysql_username
-        spring.datasource.password=your_mysql_password
+        spring.datasource.username=你的mysql用户名
+        spring.datasource.password=你的mysql密码
         ```
-2.  **Build**:
+2.  **构建**:
     ```bash
     ./mvnw clean package
     ```
-3.  **Run**:
+3.  **运行**:
     ```bash
     java -jar target/mindmap-0.0.1-SNAPSHOT.jar
     ```
-    The application will start, and Liquibase will apply the schema and sample data.
+    应用将会启动，Liquibase 将应用数据库结构和示例数据。
 
-## API Documentation
+## API 文档
 
-All API endpoints are prefixed with `/api/mindmap`.
+所有 API 端点都以 `/api/mindmap` 为前缀。
 
 ---
 
-### 1. Add Node
+### 1. 添加节点
 *   **POST** `/api/mindmap/nodes`
-*   **Description**: Creates a new mind map node.
-*   **Request Body**: `MindMapNode` object (JSON)
+*   **描述**: 创建一个新的思维导图节点。
+*   **请求体**: `MindMapNode` 对象 (JSON)
     ```json
     {
-        "parentId": null, // or ID of parent node
-        "description": "New Feature Idea",
-        "remarks": "Detailed notes about this feature.",
+        "parentId": null, // 或父节点的 ID
+        "description": "新功能点子",
+        "remarks": "关于此功能的详细说明。",
         "requirementId": "REQ-NEW-123",
         "backendDeveloper": "dev_be",
         "frontendDeveloper": "dev_fe",
         "tester": "tester_x",
-        "requirementReference": "Link to spec",
-        "status": "PENDING_TEST" // Optional, defaults to PENDING_TEST
+        "requirementReference": "需求文档链接",
+        "status": "PENDING_TEST" // 可选，默认为 PENDING_TEST
     }
     ```
-*   **cURL Example**:
+*   **cURL 示例**:
     ```bash
     curl -X POST -H "Content-Type: application/json" -d '{
         "parentId": null,
-        "description": "Root Node for API Test",
+        "description": "API 测试的根节点",
         "requirementId": "API-TEST-001"
     }' http://localhost:8080/api/mindmap/nodes
     ```
-*   **Success Response (201 CREATED)**:
+*   **成功响应 (201 CREATED)**:
     ```json
     {
-        "id": 1, // Generated ID
+        "id": 1, // 生成的 ID
         "parentId": null,
-        "description": "Root Node for API Test",
+        "description": "API 测试的根节点",
         "remarks": null,
         "requirementId": "API-TEST-001",
         "backendDeveloper": null,
@@ -75,61 +75,61 @@ All API endpoints are prefixed with `/api/mindmap`.
         "tester": null,
         "requirementReference": null,
         "status": "PENDING_TEST"
-        // children list will be empty for a new node via DTO, but this endpoint returns the entity
+        // 通过 DTO 创建新节点时，children 列表将为空，但此端点返回的是实体
     }
     ```
-*   **Error Response (400 Bad Request)**: If description is missing or other validation fails.
+*   **错误响应 (400 Bad Request)**: 如果描述缺失或其他验证失败。
 
 ---
 
-### 2. Get Node by ID
+### 2. 通过 ID 获取节点
 *   **GET** `/api/mindmap/nodes/{nodeId}`
-*   **Description**: Retrieves a specific mind map node by its ID.
-*   **Path Parameter**: `nodeId` (Long)
-*   **cURL Example**:
+*   **描述**: 通过 ID 检索特定的思维导图节点。
+*   **路径参数**: `nodeId` (Long)
+*   **cURL 示例**:
     ```bash
     curl http://localhost:8080/api/mindmap/nodes/100 
     ```
-    (Assuming node with ID 100 exists from sample data)
-*   **Success Response (200 OK)**:
+    (假设 ID 为 100 的节点存在于示例数据中)
+*   **成功响应 (200 OK)**:
     ```json
     {
         "id": 100,
         "parentId": null,
-        "description": "User Authentication Module",
-        "remarks": "Handles all aspects of user login, registration, and password management.",
+        "description": "用户认证模块",
+        "remarks": "处理用户登录、注册和密码管理的所有方面。",
         "requirementId": "REQ-AUTH-001",
-        // ... other fields ...
+        // ... 其他字段 ...
         "status": "PENDING_TEST"
     }
     ```
-*   **Error Response (404 Not Found)**: If node with the given ID doesn't exist.
+*   **错误响应 (404 Not Found)**: 如果具有给定 ID 的节点不存在。
 
 ---
 
-### 3. Get Mind Map by Requirement ID (Tree Structure)
+### 3. 通过需求 ID 获取思维导图 (树形结构)
 *   **GET** `/api/mindmap/requirements/{requirementId}/nodes`
-*   **Description**: Retrieves the entire mind map (as a tree) for a given requirement ID. Returns a list of root nodes for that requirement, each populated with its children.
-*   **Path Parameter**: `requirementId` (String)
-*   **cURL Example**:
+*   **描述**: 检索给定需求 ID 的整个思维导图 (以树形结构)。返回该需求的根节点列表，每个根节点都填充了其子节点。
+*   **路径参数**: `requirementId` (String)
+*   **cURL 示例**:
     ```bash
     curl http://localhost:8080/api/mindmap/requirements/REQ-AUTH-001/nodes
     ```
-*   **Success Response (200 OK)**:
+*   **成功响应 (200 OK)**:
     ```json
     [
         {
             "id": 100,
             "parentId": null,
-            "description": "User Authentication Module",
-            // ... other fields ...
+            "description": "用户认证模块",
+            // ... 其他字段 ...
             "status": "PENDING_TEST",
             "children": [
                 {
                     "id": 101,
                     "parentId": 100,
-                    "description": "User Registration",
-                    // ... other fields ...
+                    "description": "用户注册",
+                    // ... 其他字段 ...
                     "status": "PENDING_TEST",
                     "children": [
                         {
@@ -145,139 +145,139 @@ All API endpoints are prefixed with `/api/mindmap`.
                 {
                     "id": 102,
                     "parentId": 100,
-                    "description": "User Login",
-                    // ... other fields ...
+                    "description": "用户登录",
+                    // ... 其他字段 ...
                     "status": "PENDING_TEST",
                     "children": [
-                        // ... children of User Login
+                        // ... 用户登录的子节点
                     ]
                 }
-                // ... other children of User Authentication Module
+                // ... 用户认证模块的其他子节点
             ]
         }
-        // Potentially other root nodes if a requirement can have multiple roots (not typical for this setup)
+        // 如果一个需求可以有多个根节点，则可能还有其他根节点 (在此设置中不常见)
     ]
     ```
-*   **Success Response (200 OK with Empty List)**: If requirement ID is valid but has no nodes.
+*   **成功响应 (200 OK，列表为空)**: 如果需求 ID 有效但没有节点。
     ```json
     []
     ```
 
 ---
 
-### 4. Delete Node and Children
+### 4. 删除节点及其子节点
 *   **DELETE** `/api/mindmap/nodes/{nodeId}/tree`
-*   **Description**: Deletes a node and all its descendants.
-*   **Path Parameter**: `nodeId` (Long)
-*   **cURL Example**:
+*   **描述**: 删除一个节点及其所有后代节点。
+*   **路径参数**: `nodeId` (Long)
+*   **cURL 示例**:
     ```bash
     curl -X DELETE http://localhost:8080/api/mindmap/nodes/203/tree 
     ```
-    (Assuming node 203 "Login with non-existent username" exists)
-*   **Success Response (204 No Content)**
-*   **Note**: Test with caution, as this is a destructive operation.
+    (假设节点 203 “使用不存在的用户名登录” 存在)
+*   **成功响应 (204 No Content)**
+*   **注意**: 请谨慎测试，因为这是一个破坏性操作。
 
 ---
 
-### 5. Delete Node, Keep Children
+### 5. 删除节点，保留子节点
 *   **DELETE** `/api/mindmap/nodes/{nodeId}`
-*   **Description**: Deletes a single node and re-parents its children to the deleted node's parent.
-*   **Path Parameter**: `nodeId` (Long)
-*   **cURL Example**:
+*   **描述**: 删除单个节点，并将其子节点重新指定给被删除节点的父节点。
+*   **路径参数**: `nodeId` (Long)
+*   **cURL 示例**:
     ```bash
     curl -X DELETE http://localhost:8080/api/mindmap/nodes/103 
     ```
-    (Assuming node 103 "Password Reset" exists and has children, or to test deletion of a leaf node)
-*   **Success Response (204 No Content)**
+    (假设节点 103 “密码重置” 存在且有子节点，或用于测试删除叶子节点)
+*   **成功响应 (204 No Content)**
 
 ---
 
-### 6. Update Node Description
+### 6. 更新节点描述
 *   **PUT** `/api/mindmap/nodes/{nodeId}/description`
-*   **Description**: Updates the description of a specific node. The request body should be the new description string (plain text, but interpreted as rich text by the application logic).
-*   **Path Parameter**: `nodeId` (Long)
-*   **Request Body**: `String` (raw text)
-*   **cURL Example**:
+*   **描述**: 更新特定节点的描述。请求体应为新的描述字符串 (纯文本，但由应用逻辑解释为富文本)。
+*   **路径参数**: `nodeId` (Long)
+*   **请求体**: `String` (原始文本)
+*   **cURL 示例**:
     ```bash
-    curl -X PUT -H "Content-Type: text/plain" -d "Updated description for node 101" http://localhost:8080/api/mindmap/nodes/101/description
+    curl -X PUT -H "Content-Type: text/plain" -d "节点 101 的更新描述" http://localhost:8080/api/mindmap/nodes/101/description
     ```
-*   **Success Response (200 OK)**:
+*   **成功响应 (200 OK)**:
     ```json
     {
         "id": 101,
-        "description": "Updated description for node 101",
-        // ... other fields remain ...
+        "description": "节点 101 的更新描述",
+        // ... 其他字段保持不变 ...
     }
     ```
-*   **Error Response (404 Not Found)**: If node doesn't exist.
-*   **Error Response (400 Bad Request)**: If description is empty.
+*   **错误响应 (404 Not Found)**: 如果节点不存在。
+*   **错误响应 (400 Bad Request)**: 如果描述为空。
 
 ---
 
-### 7. Update Node Remarks
+### 7. 更新节点备注
 *   **PUT** `/api/mindmap/nodes/{nodeId}/remarks`
-*   **Description**: Updates the remarks of a specific node. The request body should be the new remarks string.
-*   **Path Parameter**: `nodeId` (Long)
-*   **Request Body**: `String` (raw text, optional)
-*   **cURL Example**:
+*   **描述**: 更新特定节点的备注。请求体应为新的备注字符串。
+*   **路径参数**: `nodeId` (Long)
+*   **请求体**: `String` (原始文本，可选)
+*   **cURL 示例**:
     ```bash
-    curl -X PUT -H "Content-Type: text/plain" -d "These are new remarks." http://localhost:8080/api/mindmap/nodes/101/remarks
+    curl -X PUT -H "Content-Type: text/plain" -d "这些是新的备注。" http://localhost:8080/api/mindmap/nodes/101/remarks
     ```
-*   **Success Response (200 OK)**:
+*   **成功响应 (200 OK)**:
     ```json
     {
         "id": 101,
-        "remarks": "These are new remarks.",
-        // ... other fields remain ...
+        "remarks": "这些是新的备注。",
+        // ... 其他字段保持不变 ...
     }
     ```
-*   **Error Response (404 Not Found)**: If node doesn't exist.
+*   **错误响应 (404 Not Found)**: 如果节点不存在。
 
 ---
 
-### 8. Set Node Status (Single)
+### 8. 设置节点状态 (单个)
 *   **PUT** `/api/mindmap/nodes/{nodeId}/status`
-*   **Description**: Sets the status of a single node. Triggers status recalculation for children (downwards) and parents (upwards).
-*   **Path Parameter**: `nodeId` (Long)
-*   **Request Body**: `NodeStatus` enum string (e.g., "TESTED", "CANCELLED", "PENDING_TEST")
-*   **cURL Example**:
+*   **描述**: 设置单个节点的状态。触发子节点 (向下) 和父节点 (向上) 的状态重新计算。
+*   **路径参数**: `nodeId` (Long)
+*   **请求体**: `NodeStatus` 枚举字符串 (例如："TESTED", "CANCELLED", "PENDING_TEST")
+*   **cURL 示例**:
     ```bash
     curl -X PUT -H "Content-Type: application/json" -d '"TESTED"' http://localhost:8080/api/mindmap/nodes/201/status
     ```
-    (Node 201 is "Login with valid credentials")
-*   **Success Response (200 OK)**:
+    (节点 201 是 “使用有效凭据登录”)
+*   **成功响应 (200 OK)**:
     ```json
     {
         "id": 201,
         "status": "TESTED",
-        // ... other fields ...
-        // Note: The response is the node whose status was directly set.
-        // Children and parent statuses are updated as a side effect.
+        // ... 其他字段 ...
+        // 注意：响应是直接设置其状态的节点。
+        // 子节点和父节点的状态作为副作用被更新。
     }
     ```
-*   **Error Response (404 Not Found)**: If node doesn't exist.
-*   **Error Response (400 Bad Request)**: If status string is invalid.
+*   **错误响应 (404 Not Found)**: 如果节点不存在。
+*   **错误响应 (400 Bad Request)**: 如果状态字符串无效。
 
 ---
 
-### 9. Batch Set Node Status
+### 9. 批量设置节点状态
 *   **PUT** `/api/mindmap/nodes/status/batch`
-*   **Description**: Sets the status for multiple nodes. Triggers status recalculations for children and parents of affected nodes.
-*   **Request Body**: `BatchStatusUpdateRequest` object (JSON)
+*   **描述**: 设置多个节点的状态。触发受影响节点的子节点和父节点的状态重新计算。
+*   **请求体**: `BatchStatusUpdateRequest` 对象 (JSON)
     ```json
     {
-        "nodeIds": [201, 202], // List of node IDs
-        "status": "CANCELLED"  // New status for these nodes
+        "nodeIds": [201, 202], // 节点 ID 列表
+        "status": "CANCELLED"  // 这些节点的新状态
     }
     ```
-*   **cURL Example**:
+*   **cURL 示例**:
     ```bash
     curl -X PUT -H "Content-Type: application/json" -d '{
         "nodeIds": [201, 202],
         "status": "CANCELLED"
     }' http://localhost:8080/api/mindmap/nodes/status/batch
     ```
-*   **Success Response (200 OK)**: List of nodes from the batch that were processed.
+*   **成功响应 (200 OK)**: 已处理的批次中的节点列表。
     ```json
     [
         {
@@ -292,4 +292,4 @@ All API endpoints are prefixed with `/api/mindmap`.
         }
     ]
     ```
-*   **Error Response (400 Bad Request)**: If request is malformed (e.g., missing fields, invalid status).
+*   **错误响应 (400 Bad Request)**: 如果请求格式错误 (例如：缺少字段、状态无效)。
