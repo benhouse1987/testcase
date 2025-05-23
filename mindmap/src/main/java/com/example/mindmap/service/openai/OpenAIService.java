@@ -25,7 +25,7 @@ public class OpenAIService {
     private final String apiKey;
     private final ObjectMapper objectMapper; // For parsing JSON string to DTO
 
-    private static final String OPENAI_CHAT_COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions";
+    private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview";;
 
     public OpenAIService(WebClient.Builder webClientBuilder, @Value("${openai.api.key}") String apiKey, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl(OPENAI_CHAT_COMPLETIONS_URL)
