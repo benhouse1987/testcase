@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper; // For parsing JSON content
 import java.util.ArrayList; // For creating messages list
 import java.util.List; // For List interface
 import java.util.Map; // For Map interface for responseFormatMap
+import java.util.HashMap; // For HashMap
+import java.util.Collections; // For Collections.unmodifiableMap
 
 
 @Service
@@ -44,7 +46,9 @@ public class OpenAIService {
         messages.add(new OpenAIMessageDto("user", userPromptPrefix + "\n\n" + requirementText));
 
         // Specify JSON response format
-        Map<String, String> responseFormatMap = Map.of("type", "json_object");
+        Map<String, String> responseFormatMap = new HashMap<>();
+        responseFormatMap.put("type", "json_object");
+        responseFormatMap = Collections.unmodifiableMap(responseFormatMap);
         OpenAIChatRequestDto requestDto = new OpenAIChatRequestDto("gpt-4o-mini", messages, responseFormatMap);
 
         return this.webClient.post()
