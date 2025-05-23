@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.mindmap.dto.BatchCreateNodeDto;
 import com.example.mindmap.dto.RequirementInputDto; // New DTO
 import javax.validation.Valid;
+import org.slf4j.Logger; // SLF4J Logger
+import org.slf4j.LoggerFactory; // SLF4J LoggerFactory
 
 
 import java.util.List;
@@ -17,6 +19,8 @@ import com.example.mindmap.dto.MindMapNodeDto; // Add this import
 @RestController
 @RequestMapping("/api/mindmap")
 public class MindMapController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MindMapController.class); // SLF4J Logger instance
 
     @Autowired
     private MindMapService mindMapService;
@@ -152,19 +156,24 @@ public class MindMapController {
     // POST /api/mindmap/generate-from-requirement
     @PostMapping("/generate-from-requirement")
     public ResponseEntity<MindMapNodeDto> generateAndCreateMindMap(@Valid @RequestBody RequirementInputDto requirementInputDto) {
+        logger.info("Received request to generate test cases for requirement ID: {}", requirementInputDto.getRequirementId());
+        logger.debug("Full request payload: {}", requirementInputDto); // Logs the full DTO, requires toString() in DTO or use ObjectMapper
+
         try {
             MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(requirementInputDto);
+            logger.info("Successfully generated and saved test cases for requirement ID: {}. Returning root node ID: {}", requirementInputDto.getRequirementId(), mindMapRootNode != null ? mindMapRootNode.getId() : "null");
+            logger.debug("Full response payload: {}", mindMapRootNode); // Logs the full DTO
+
             return ResponseEntity.status(HttpStatus.CREATED).body(mindMapRootNode);
         } catch (IllegalStateException e) {
-            // Specifically catch API key issues from OpenAIService
-            // You might want to return a different HTTP status, e.g., 503 Service Unavailable or 400 Bad Request
-            // For now, returning 500 with the message.
+            logger.error("Error generating test cases for requirement ID: {}. OpenAI API key issue: {}", requirementInputDto.getRequirementId(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simplified error response
         } catch (RuntimeException e) {
-            // Catch other runtime exceptions, e.g., from .block() or if GPT response is empty
-            // Log the exception server-side
+            logger.error("Error generating test cases for requirement ID: {}. RuntimeException: {}", requirementInputDto.getRequirementId(), e.getMessage(), e); // Log stack trace
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simplified error response
+        } catch (Exception e) { // Catch any other unexpected errors
+            logger.error("Unexpected error generating test cases for requirement ID: {}: {}", requirementInputDto.getRequirementId(), e.getMessage(), e); // Log stack trace
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        // Consider adding more specific exception handling for different failure scenarios
     }
 }
