@@ -498,4 +498,77 @@ public class MindMapServiceImpl implements MindMapService {
         // This reuses the logic to save the hierarchical structure.
         return this.createNodesBatch(rootBatchDto);
     }
+
+    @Override
+    @Transactional
+    public void moveNode(Long nodeToMoveId, Long newParentNodeId) {
+        if (nodeToMoveId.equals(newParentNodeId)) {
+            throw new IllegalArgumentException("Node cannot be moved to itself. Node ID: " + nodeToMoveId);
+        }
+
+        MindMapNode nodeToMove = mindMapNodeMapper.selectById(nodeToMoveId);
+        if (nodeToMove == null) {
+            throw new IllegalArgumentException("Node to move (ID: " + nodeToMoveId + ") not found.");
+        }
+
+        MindMapNode newParentNode = null;
+        // The problem description implies newParentNodeId is always for an existing node.
+        // If newParentNodeId could be null to move to root, the @PathVariable would need to be optional,
+        // or a different endpoint would be used.
+        if (newParentNodeId == null) {
+             // This case might mean moving nodeToMove to become a root node.
+             // However, based on the PUT /nodes/{nodeToMoveId}/move-to/{newParentNodeId} path,
+             // newParentNodeId is expected to be present.
+             // If moving to root is a requirement for this endpoint, it needs clarification on how newParentNodeId indicates this.
+             // For now, let's assume newParentNodeId is always provided for an existing parent.
+            throw new IllegalArgumentException("New parent node ID cannot be null for this operation.");
+        }
+
+        newParentNode = mindMapNodeMapper.selectById(newParentNodeId);
+        if (newParentNode == null) {
+            throw new IllegalArgumentException("New parent node (ID: " + newParentNodeId + ") not found.");
+        }
+
+
+        // Check if already a child of the new parent
+        // Handles cases where parentId is null (root node) and newParentNodeId is also null (moving a root to be a root - no op)
+        // or where parentId is not null and equals newParentNodeId.
+        if ((nodeToMove.getParentId() == null && newParentNodeId == null) || 
+            (nodeToMove.getParentId() != null && nodeToMove.getParentId().equals(newParentNodeId))) {
+            // Already in the desired state, do nothing.
+            // Consider logging this event if useful:
+            // logger.info("Node {} is already a child of {}. No move operation needed.", nodeToMoveId, newParentNodeId);
+            return;
+        }
+        
+        // Cyclic dependency check: newParentNode cannot be a descendant of nodeToMove
+        // This check is relevant only if newParentNodeId refers to an actual node.
+        // If newParentNodeId was null (moving to root), this check would be skipped.
+        List<MindMapNode> descendants = new ArrayList<>();
+        getAllDescendants(nodeToMoveId, descendants);
+        for (MindMapNode descendant : descendants) {
+            if (descendant.getId().equals(newParentNodeId)) {
+                throw new IllegalArgumentException(
+                    "Cyclic move detected: New parent node (ID: " + newParentNodeId + ") " +
+                    "is a descendant of the node to move (ID: " + nodeToMoveId + ")."
+                );
+            }
+        }
+
+        // All checks passed, update parentId and save
+        nodeToMove.setParentId(newParentNodeId); 
+        mindMapNodeMapper.updateById(nodeToMove);
+        // logger.info("Node {} moved successfully under new parent {}", nodeToMoveId, newParentNodeId);
+    }
+
+    private void getAllDescendants(Long nodeId, List<MindMapNode> descendantsList) {
+        QueryWrapper<MindMapNode> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_id", nodeId);
+        List<MindMapNode> directChildren = mindMapNodeMapper.selectList(queryWrapper);
+
+        for (MindMapNode child : directChildren) {
+            descendantsList.add(child);
+            getAllDescendants(child.getId(), descendantsList); // Recursive call
+        }
+    }
 }

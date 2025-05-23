@@ -27,4 +27,5 @@ public interface MindMapService {
     // No redundant line here, the new signature is already correctly placed above.
     MindMapNodeDto createNodesBatch(BatchCreateNodeDto batchCreateNodeDto);
     MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto);
+    void moveNode(Long nodeToMoveId, Long newParentNodeId);
 }

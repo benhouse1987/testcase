@@ -176,4 +176,26 @@ public class MindMapController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PutMapping("/nodes/{nodeToMoveId}/move-to/{newParentNodeId}")
+    public ResponseEntity<Void> moveNode(
+            @PathVariable Long nodeToMoveId,
+            @PathVariable Long newParentNodeId) {
+        try {
+            mindMapService.moveNode(nodeToMoveId, newParentNodeId);
+            return ResponseEntity.noContent().build(); // HTTP 204 for successful update with no body
+        } catch (IllegalArgumentException e) { // Catching a generic exception for now
+            // Based on service logic, this could be 400 Bad Request or 404 Not Found
+            // For simplicity, returning 400. More specific exception handling is better.
+            // A @ControllerAdvice would be ideal for mapping custom service exceptions to HTTP statuses.
+            logger.warn("Failed to move node {} to new parent {}: {}", nodeToMoveId, newParentNodeId, e.getMessage());
+            if (e.getMessage().contains("not found") || e.getMessage().contains("does not exist")) { // Basic check
+                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            return ResponseEntity.badRequest().build(); // For cyclic dependencies or other invalid arguments
+        } catch (Exception e) { // Catch-all for other unexpected errors
+            logger.error("Unexpected error while moving node {} to new parent {}: {}", nodeToMoveId, newParentNodeId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
