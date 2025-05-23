@@ -427,6 +427,8 @@ public class MindMapServiceImpl implements MindMapService {
     @Override
     @Transactional // This operation should be atomic
     public MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto) {
+        mindMapNodeMapper.deleteByRequirementId(requirementInputDto.getRequirementId());
+
         // 1. Define Prompts for OpenAI
         String systemPrompt = "You are a senior testing expert. Please write test cases in Chinese for the requirements. " +
                               "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +
