@@ -293,3 +293,90 @@
     ]
     ```
 *   **错误响应 (400 Bad Request)**: 如果请求格式错误 (例如：缺少字段、状态无效)。
+
+---
+
+### 10. 批量创建节点 (层级结构)
+*   **POST** `/api/mindmap/nodes/batch`
+*   **描述**: 根据层级请求结构创建根思维导图节点及其所有后代节点。整个操作是事务性的；如果任何节点创建失败，所有更改都将回滚。
+*   **请求体**: `BatchCreateNodeDto` 对象 (JSON)。有关字段详细信息，请参阅 `BatchCreateNodeDto.java` (description, requirementId 是必需的；status 默认为 PENDING_TEST)。
+    ```json
+    {
+        "description": "Root Project Alpha",
+        "requirementId": "REQ-ALPHA-001",
+        "remarks": "Main project container",
+        "backendDeveloper": "dev_lead_be",
+        "frontendDeveloper": "dev_lead_fe",
+        "tester": "qa_lead",
+        "status": "PENDING_TEST",
+        "children": [
+            {
+                "description": "Phase 1: Design",
+                "requirementId": "REQ-ALPHA-001", // 通常整个树使用相同的 reqId
+                "remarks": "Initial design documents",
+                "children": [
+                    {
+                        "description": "API Specification",
+                        "requirementId": "REQ-ALPHA-001"
+                    },
+                    {
+                        "description": "Database Schema",
+                        "requirementId": "REQ-ALPHA-001"
+                    }
+                ]
+            },
+            {
+                "description": "Phase 2: Development",
+                "requirementId": "REQ-ALPHA-001",
+                "children": [
+                    {
+                        "description": "Backend Implementation",
+                        "requirementId": "REQ-ALPHA-001"
+                    },
+                    {
+                        "description": "Frontend Implementation",
+                        "requirementId": "REQ-ALPHA-001"
+                    }
+                ]
+            }
+        ]
+    }
+    ```
+*   **cURL 示例**:
+    ```bash
+    curl -X POST -H "Content-Type: application/json" -d '{
+        "description": "Root Project Beta",
+        "requirementId": "REQ-BETA-002",
+        "children": [
+            {"description": "Task 1", "requirementId": "REQ-BETA-002"}
+        ]
+    }' http://localhost:8080/api/mindmap/nodes/batch
+    ```
+*   **成功响应 (201 CREATED)**: 以嵌套结构返回创建的根节点及其所有子节点 (使用 `MindMapNodeDto` 格式)。
+    ```json
+    {
+        "id": 123, // 示例 ID
+        "parentId": null,
+        "description": "Root Project Alpha",
+        "remarks": "Main project container",
+        "requirementId": "REQ-ALPHA-001",
+        "backendDeveloper": "dev_lead_be",
+        "frontendDeveloper": "dev_lead_fe",
+        "tester": "qa_lead",
+        "status": "PENDING_TEST",
+        "children": [
+            {
+                "id": 124,
+                "parentId": 123,
+                "description": "Phase 1: Design",
+                // ... 其他字段 ...
+                "children": [
+                    // ... 孙子节点 ...
+                ]
+            }
+            // ... 其他子节点 ...
+        ]
+    }
+    ```
+*   **错误响应 (400 Bad Request)**: 如果请求验证失败 (例如，缺少 `description` 或 `requirementId`，或其他 DTO 验证规则)。
+*   **错误响应 (500 Internal Server Error)**: 如果在创建过程中发生数据库错误 (事务将回滚)。

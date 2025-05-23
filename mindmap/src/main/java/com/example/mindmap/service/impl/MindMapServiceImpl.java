@@ -18,6 +18,8 @@ import java.util.stream.Collectors; // Added import
 
 import com.example.mindmap.entity.NodeStatus;
 import com.example.mindmap.dto.MindMapNodeDto; // Added import
+import com.example.mindmap.dto.BatchCreateNodeDto;
+
 
 @Service
 public class MindMapServiceImpl implements MindMapService {
@@ -330,5 +332,83 @@ public class MindMapServiceImpl implements MindMapService {
             mindMapNodeMapper.updateById(parentNode);
             recalculateParentStatusRecursive(parentId); // Recurse upwards
         }
+    }
+
+    @Override
+    @Transactional // Ensure atomicity: if any part fails, the whole transaction rolls back.
+    public MindMapNodeDto createNodesBatch(BatchCreateNodeDto batchCreateNodeDto) {
+        if (batchCreateNodeDto == null) {
+            throw new IllegalArgumentException("Batch creation DTO cannot be null.");
+        }
+
+        // Convert the root DTO to an entity and save it
+        MindMapNode rootNodeEntity = convertBatchDtoToEntity(batchCreateNodeDto, null); // null for parentId of root
+        mindMapNodeMapper.insert(rootNodeEntity); // MyBatis Plus will set the ID on rootNodeEntity after insert
+
+        // Recursively create children
+        if (batchCreateNodeDto.getChildren() != null && !batchCreateNodeDto.getChildren().isEmpty()) {
+            createChildrenRecursive(batchCreateNodeDto.getChildren(), rootNodeEntity.getId());
+        }
+
+        // After all nodes are created, fetch the complete structure to return as a DTO.
+        return getMindMapNodeDtoWithChildren(rootNodeEntity.getId());
+    }
+
+    private MindMapNode convertBatchDtoToEntity(BatchCreateNodeDto dto, Long parentId) {
+        MindMapNode entity = new MindMapNode();
+        entity.setDescription(dto.getDescription());
+        entity.setRemarks(dto.getRemarks());
+        entity.setRequirementId(dto.getRequirementId());
+        entity.setBackendDeveloper(dto.getBackendDeveloper());
+        entity.setFrontendDeveloper(dto.getFrontendDeveloper());
+        entity.setTester(dto.getTester());
+        entity.setRequirementReference(dto.getRequirementReference());
+        entity.setStatus(dto.getStatus() == null ? com.example.mindmap.entity.NodeStatus.PENDING_TEST : dto.getStatus());
+        entity.setParentId(parentId);
+        // Note: Children are not set here as they are handled by recursive calls after parent is saved.
+        return entity;
+    }
+
+    private void createChildrenRecursive(List<BatchCreateNodeDto> childDtos, Long parentId) {
+        for (BatchCreateNodeDto childDto : childDtos) {
+            MindMapNode childNodeEntity = convertBatchDtoToEntity(childDto, parentId);
+            mindMapNodeMapper.insert(childNodeEntity); // ID will be set on childNodeEntity
+
+            if (childDto.getChildren() != null && !childDto.getChildren().isEmpty()) {
+                createChildrenRecursive(childDto.getChildren(), childNodeEntity.getId());
+            }
+        }
+    }
+
+    private MindMapNodeDto getMindMapNodeDtoWithChildren(Long nodeId) {
+        MindMapNode nodeEntity = mindMapNodeMapper.selectById(nodeId);
+        if (nodeEntity == null) {
+            return null;
+        }
+
+        MindMapNodeDto nodeDto = new MindMapNodeDto(
+            nodeEntity.getId(),
+            nodeEntity.getParentId(),
+            nodeEntity.getDescription(),
+            nodeEntity.getRemarks(),
+            nodeEntity.getRequirementId(),
+            nodeEntity.getBackendDeveloper(),
+            nodeEntity.getFrontendDeveloper(),
+            nodeEntity.getTester(),
+            nodeEntity.getRequirementReference(),
+            nodeEntity.getStatus()
+        );
+
+        // Fetch and set children
+        QueryWrapper<MindMapNode> childrenQuery = new QueryWrapper<>();
+        childrenQuery.eq("parent_id", nodeId);
+        List<MindMapNode> childEntities = mindMapNodeMapper.selectList(childrenQuery);
+
+        if (childEntities != null && !childEntities.isEmpty()) {
+            for (MindMapNode childEntity : childEntities) {
+                nodeDto.getChildren().add(getMindMapNodeDtoWithChildren(childEntity.getId())); // Recursive call
+            }
+        }
+        return nodeDto;
     }
 }

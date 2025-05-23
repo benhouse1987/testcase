@@ -3,6 +3,7 @@ package com.example.mindmap.service;
 import com.example.mindmap.entity.MindMapNode;
 import java.util.List;
 import com.example.mindmap.dto.MindMapNodeDto; // Ensure this import is here
+import com.example.mindmap.dto.BatchCreateNodeDto;
 
 public interface MindMapService {
     MindMapNode addNode(MindMapNode node);
@@ -23,4 +24,5 @@ public interface MindMapService {
     List<MindMapNode> batchSetNodeStatus(List<Long> nodeIds, com.example.mindmap.entity.NodeStatus status);
 
     // No redundant line here, the new signature is already correctly placed above.
+    MindMapNodeDto createNodesBatch(BatchCreateNodeDto batchCreateNodeDto);
 }

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.mindmap.dto.BatchCreateNodeDto;
+import javax.validation.Valid;
+
 
 import java.util.List;
 import com.example.mindmap.dto.MindMapNodeDto; // Add this import
@@ -135,5 +138,12 @@ public class MindMapController {
             // This catches validation errors from the service layer (e.g. empty list after filtering)
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @PostMapping("/nodes/batch")
+    public ResponseEntity<MindMapNodeDto> createNodesBatch(@Valid @RequestBody BatchCreateNodeDto batchCreateNodeDto) {
+        MindMapNodeDto createdRootNode = mindMapService.createNodesBatch(batchCreateNodeDto);
+        // Assuming createNodesBatch returns the root DTO of the created structure
+        return new ResponseEntity<>(createdRootNode, HttpStatus.CREATED);
     }
 }
