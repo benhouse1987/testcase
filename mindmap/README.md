@@ -432,3 +432,27 @@
     ```
 *   **错误响应 (400 Bad Request)**: 如果请求验证失败 (例如，缺少 `requirementId`, `requirementTitle`, 或 `originalRequirementText`)。
 *   **错误响应 (500 Internal Server Error)**: 如果 OpenAI API 调用失败，如果无法解析来自 OpenAI 的响应，如果生成的数据不符合预期格式，或者在节点创建过程中发生数据库错误。
+
+---
+
+### 12. 移动节点 (及其子节点)
+*   **PUT** `/api/mindmap/nodes/{nodeToMoveId}/move-to/{newParentNodeId}`
+*   **功能描述**: 将指定的节点 (`nodeToMoveId`) 及其所有子节点，整体移动成为另一个指定节点 (`newParentNodeId`) 的子节点。此操作会更新 `nodeToMoveId` 的 `parentId` 为 `newParentNodeId` 的 ID。
+*   **路径参数**:
+    *   `nodeToMoveId` (Long): 需要移动的节点的ID。
+    *   `newParentNodeId` (Long): 新的父节点的ID。
+*   **请求体**: 无。
+*   **cURL 示例**:
+    ```bash
+    curl -X PUT http://localhost:8080/api/mindmap/nodes/105/move-to/102
+    ```
+    (此示例表示将 ID 为 105 的节点移动到 ID 为 102 的节点下，成为其子节点)
+*   **成功响应**:
+    *   `204 No Content`: 如果节点移动成功，或者指定的节点 (`nodeToMoveId`) 原本就已经是目标父节点 (`newParentNodeId`) 的子节点 (此时不执行任何操作)。
+*   **错误响应**:
+    *   `400 Bad Request` (错误请求):
+        *   如果 `nodeToMoveId` 与 `newParentNodeId` 相同 (节点不能移动到自身下)。
+        *   如果 `newParentNodeId` 是 `nodeToMoveId` 的后代节点之一 (避免循环依赖)。
+    *   `404 Not Found` (未找到):
+        *   如果 `nodeToMoveId` 指定的节点不存在。
+        *   如果 `newParentNodeId` 指定的目标父节点不存在。
