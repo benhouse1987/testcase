@@ -19,6 +19,15 @@ import java.util.stream.Collectors; // Added import
 import com.example.mindmap.entity.NodeStatus;
 import com.example.mindmap.dto.MindMapNodeDto; // Added import
 import com.example.mindmap.dto.BatchCreateNodeDto;
+import com.example.mindmap.dto.RequirementInputDto;
+import com.example.mindmap.service.openai.OpenAIService;
+import com.example.mindmap.service.openai.dto.GPTTestCaseStructureDto;
+import com.example.mindmap.service.openai.dto.FunctionalPointDto;
+import com.example.mindmap.service.openai.dto.ScenarioDto;
+// import org.springframework.beans.factory.annotation.Autowired; // Already present
+// import java.util.ArrayList; // Already present
+// import java.util.List; // Already present
+import reactor.core.publisher.Mono; // For handling async call
 
 
 @Service
@@ -26,6 +35,9 @@ public class MindMapServiceImpl implements MindMapService {
 
     @Autowired
     private MindMapNodeMapper mindMapNodeMapper;
+
+    @Autowired
+    private OpenAIService openAIService;
 
     @Override
     @Transactional
@@ -410,5 +422,80 @@ public class MindMapServiceImpl implements MindMapService {
             }
         }
         return nodeDto;
+    }
+
+    @Override
+    @Transactional // This operation should be atomic
+    public MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto) {
+        // 1. Define Prompts for OpenAI
+        String systemPrompt = "You are a senior testing expert. Please write test cases in Chinese for the requirements. " +
+                              "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +
+                              "which is an array. Each element in 'functionalPoints' should represent a distinct functional point and have " +
+                              "'functionalPointName' (string) and 'testScenarios' (array) keys. Each element in 'testScenarios' should have " +
+                              "'testCaseId' (string, e.g., TC-001), 'testCaseGroup' (string, e.g., Smoke Test), " +
+                              "'quotedRequirementText' (string), 'prerequisites' (string), 'testSteps' (string), and 'expectedResults' (string) keys. " +
+                              "Ensure 'quotedRequirementText' includes about 20 characters before and after the relevant part of the original text, with ellipses for the rest.";
+
+        String userPromptPrefix = "Based on the following requirement, generate detailed test cases as per the specified JSON structure. " +
+                                  "Divide the requirement into multiple distinct functional test object names. " +
+                                  "For each functional point, write corresponding test cases. " +
+                                  "Provide as many diverse test cases as possible without repetition of the same validation type. " +
+                                  "The 'quotedRequirementText' should be extracted carefully from the original requirement text provided below, " +
+                                  "including approximately 20 characters before and 20 characters after the key segment, using '...' for omitted parts.";
+
+        // 2. Call OpenAIService - this is a blocking call for simplicity in this example.
+        // In a fully reactive application, you'd continue the reactive chain.
+        GPTTestCaseStructureDto gptResponse = openAIService.generateTestCases(
+                requirementInputDto.getOriginalRequirementText(),
+                systemPrompt,
+                userPromptPrefix
+        ).block(); // .block() makes it synchronous. Handle potential errors if Mono is empty or errors out.
+
+        if (gptResponse == null || gptResponse.getFunctionalPoints() == null || gptResponse.getFunctionalPoints().isEmpty()) {
+            // Handle error: GPT returned no usable data
+            // You might throw an exception or return null/empty DTO
+            throw new RuntimeException("Failed to generate test cases or received empty response from AI service.");
+        }
+
+        // 3. Transform GPT response (GPTTestCaseStructureDto) to BatchCreateNodeDto
+        BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
+        rootBatchDto.setDescription(requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
+        rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
+        // Set other root node properties if necessary, e.g., status
+
+        List<BatchCreateNodeDto> firstLevelChildren = new ArrayList<>();
+        for (FunctionalPointDto fpDto : gptResponse.getFunctionalPoints()) {
+            BatchCreateNodeDto fpNodeDto = new BatchCreateNodeDto();
+            fpNodeDto.setDescription(fpDto.getFunctionalPointName());
+            fpNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
+
+            List<BatchCreateNodeDto> secondLevelChildren = new ArrayList<>();
+            if (fpDto.getTestScenarios() != null) {
+                for (ScenarioDto scenarioDto : fpDto.getTestScenarios()) {
+                    BatchCreateNodeDto scenarioNodeDto = new BatchCreateNodeDto();
+                    
+                    // Construct rich text description for the scenario node
+                    StringBuilder scenarioDescription = new StringBuilder();
+                    scenarioDescription.append("### Test Scenario: ").append(fpDto.getFunctionalPointName()).append("\n"); // Markdown H3 for scenario title
+                    scenarioDescription.append("**Test Case ID:** ").append(scenarioDto.getTestCaseId()).append("\n");
+                    scenarioDescription.append("**Test Case Group:** ").append(scenarioDto.getTestCaseGroup()).append("\n");
+                    scenarioDescription.append("**Prerequisites:** ").append(scenarioDto.getPrerequisites()).append("\n");
+                    scenarioDescription.append("**Test Steps:**\n").append(scenarioDto.getTestSteps().replace("\n", "\n    ")).append("\n"); // Indent steps
+                    scenarioDescription.append("**Expected Results:** ").append(scenarioDto.getExpectedResults()).append("\n");
+                    
+                    scenarioNodeDto.setDescription(scenarioDescription.toString());
+                    scenarioNodeDto.setRequirementReference(scenarioDto.getQuotedRequirementText());
+                    scenarioNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
+                    secondLevelChildren.add(scenarioNodeDto);
+                }
+            }
+            fpNodeDto.setChildren(secondLevelChildren);
+            firstLevelChildren.add(fpNodeDto);
+        }
+        rootBatchDto.setChildren(firstLevelChildren);
+
+        // 4. Call existing batch creation logic (from previous user request)
+        // This reuses the logic to save the hierarchical structure.
+        return this.createNodesBatch(rootBatchDto);
     }
 }

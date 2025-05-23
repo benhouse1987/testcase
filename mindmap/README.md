@@ -380,3 +380,55 @@
     ```
 *   **错误响应 (400 Bad Request)**: 如果请求验证失败 (例如，缺少 `description` 或 `requirementId`，或其他 DTO 验证规则)。
 *   **错误响应 (500 Internal Server Error)**: 如果在创建过程中发生数据库错误 (事务将回滚)。
+
+---
+
+### 11. 通过 AI 生成测试用例
+*   **POST** `/api/mindmap/requirements/generate-test-cases`
+*   **描述**: 通过 OpenAI GPT API 为给定需求生成思维导图测试用例树。根节点以需求 ID 和标题命名。第一级子节点是功能点，第二级子节点是源自这些功能点的测试场景。测试场景描述包括测试用例 ID、分组、前置条件、测试步骤和预期结果等详细信息，并格式化为 Markdown。场景的引用需求文本也会被填充。从 AI 获取数据并保存到数据库的整个操作在可能的情况下是事务性的 (数据库部分)。
+*   **请求体**: `RequirementInputDto` 对象 (JSON)。有关字段详细信息，请参阅 `RequirementInputDto.java` (`requirementId`, `requirementTitle`, `originalRequirementText` 是必需的)。
+    ```json
+    {
+        "requirementId": "REQ-USER-LOGIN-001",
+        "requirementTitle": "用户登录功能",
+        "originalRequirementText": "用户需要能够使用其注册的电子邮箱和密码登录系统。系统应验证凭据的有效性。如果凭据有效，用户将被重定向到其个人仪表板。如果凭据无效，应显示相应的错误消息。登录尝试次数不应超过五次，之后账户将被临时锁定。"
+    }
+    ```
+*   **cURL 示例**:
+    ```bash
+    curl -X POST -H "Content-Type: application/json" -d '{
+        "requirementId": "REQ-USER-LOGIN-001",
+        "requirementTitle": "用户登录功能",
+        "originalRequirementText": "用户需要能够使用其注册的电子邮箱和密码登录系统。系统应验证凭据的有效性。如果凭据有效，用户将被重定向到其个人仪表板。如果凭据无效，应显示相应的错误消息。登录尝试次数不应超过五次，之后账户将被临时锁定。"
+    }' http://localhost:8080/api/mindmap/requirements/generate-test-cases
+    ```
+*   **成功响应 (201 CREATED)**: 以嵌套结构返回创建的根思维导图节点及其所有 AI 生成的子节点 (功能点和场景) (使用 `MindMapNodeDto` 格式)。
+    ```json
+    {
+        "id": 201, // Example ID
+        "parentId": null,
+        "description": "REQ-USER-LOGIN-001 用户登录功能",
+        "requirementId": "REQ-USER-LOGIN-001",
+        // ... other root node fields ...
+        "children": [
+            {
+                "id": 202,
+                "parentId": 201,
+                "description": "用户凭据有效性验证", // Example functional point
+                // ...
+                "children": [
+                    {
+                        "id": 203,
+                        "parentId": 202,
+                        "description": "### Test Scenario: 用户凭据有效性验证\n**Test Case ID:** TC-LOGIN-001\n**Test Case Group:** ...", // Example scenario description (Markdown)
+                        "requirementReference": "...系统应验证凭据的有效性...", // Example quoted text
+                        // ...
+                    }
+                ]
+            }
+            // ... other functional points ...
+        ]
+    }
+    ```
+*   **错误响应 (400 Bad Request)**: 如果请求验证失败 (例如，缺少 `requirementId`, `requirementTitle`, 或 `originalRequirementText`)。
+*   **错误响应 (500 Internal Server Error)**: 如果 OpenAI API 调用失败，如果无法解析来自 OpenAI 的响应，如果生成的数据不符合预期格式，或者在节点创建过程中发生数据库错误。

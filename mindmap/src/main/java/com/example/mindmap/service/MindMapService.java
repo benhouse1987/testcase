@@ -4,6 +4,7 @@ import com.example.mindmap.entity.MindMapNode;
 import java.util.List;
 import com.example.mindmap.dto.MindMapNodeDto; // Ensure this import is here
 import com.example.mindmap.dto.BatchCreateNodeDto;
+import com.example.mindmap.dto.RequirementInputDto;
 
 public interface MindMapService {
     MindMapNode addNode(MindMapNode node);
@@ -25,4 +26,5 @@ public interface MindMapService {
 
     // No redundant line here, the new signature is already correctly placed above.
     MindMapNodeDto createNodesBatch(BatchCreateNodeDto batchCreateNodeDto);
+    MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto);
 }

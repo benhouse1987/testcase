@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.mindmap.dto.BatchCreateNodeDto;
+import com.example.mindmap.dto.RequirementInputDto; // New DTO
 import javax.validation.Valid;
 
 
@@ -145,5 +146,25 @@ public class MindMapController {
         MindMapNodeDto createdRootNode = mindMapService.createNodesBatch(batchCreateNodeDto);
         // Assuming createNodesBatch returns the root DTO of the created structure
         return new ResponseEntity<>(createdRootNode, HttpStatus.CREATED);
+    }
+
+    // New endpoint for generating test cases and creating mind map
+    // POST /api/mindmap/generate-from-requirement
+    @PostMapping("/generate-from-requirement")
+    public ResponseEntity<MindMapNodeDto> generateAndCreateMindMap(@Valid @RequestBody RequirementInputDto requirementInputDto) {
+        try {
+            MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(requirementInputDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(mindMapRootNode);
+        } catch (IllegalStateException e) {
+            // Specifically catch API key issues from OpenAIService
+            // You might want to return a different HTTP status, e.g., 503 Service Unavailable or 400 Bad Request
+            // For now, returning 500 with the message.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simplified error response
+        } catch (RuntimeException e) {
+            // Catch other runtime exceptions, e.g., from .block() or if GPT response is empty
+            // Log the exception server-side
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simplified error response
+        }
+        // Consider adding more specific exception handling for different failure scenarios
     }
 }
