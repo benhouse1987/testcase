@@ -20,6 +20,7 @@ import com.example.mindmap.entity.NodeStatus;
 import com.example.mindmap.dto.MindMapNodeDto; // Added import
 import com.example.mindmap.dto.BatchCreateNodeDto;
 import com.example.mindmap.dto.RequirementInputDto;
+import com.example.mindmap.dto.UpdateNodeRequest; // Added
 import com.example.mindmap.service.openai.OpenAIService;
 import com.example.mindmap.service.openai.dto.GPTTestCaseStructureDto;
 import com.example.mindmap.service.openai.dto.FunctionalPointDto;
@@ -570,5 +571,77 @@ public class MindMapServiceImpl implements MindMapService {
             descendantsList.add(child);
             getAllDescendants(child.getId(), descendantsList); // Recursive call
         }
+    }
+
+    @Override
+    @Transactional
+    public MindMapNodeDto updateNode(Long id, UpdateNodeRequest request) {
+        MindMapNode node = mindMapNodeMapper.selectById(id);
+        if (node == null) {
+            throw new RuntimeException("Node not found with id: " + id); // Consider specific exception
+        }
+
+        if (request.getDescription() != null) {
+            node.setDescription(request.getDescription());
+        }
+        if (request.getRemarks() != null) {
+            node.setRemarks(request.getRemarks());
+        }
+        if (request.getRequirementId() != null) {
+            node.setRequirementId(request.getRequirementId());
+        }
+        if (request.getBackendDeveloper() != null) {
+            node.setBackendDeveloper(request.getBackendDeveloper());
+        }
+        if (request.getFrontendDeveloper() != null) {
+            node.setFrontendDeveloper(request.getFrontendDeveloper());
+        }
+        if (request.getTester() != null) {
+            node.setTester(request.getTester());
+        }
+        if (request.getRequirementReference() != null) {
+            node.setRequirementReference(request.getRequirementReference());
+        }
+        if (request.getStatus() != null) {
+            node.setStatus(request.getStatus());
+            // If status changes, we might need to trigger recalculations like in setNodeStatus
+            // For this subtask, direct status update is performed.
+            // Consider if recalculateChildrenStatusRecursive and recalculateParentStatusRecursive
+            // should be called here if status is part of the update.
+            // For now, keeping it simple as per initial instructions.
+        }
+        if (request.getIsExpanded() != null) {
+            node.setExpanded(request.getIsExpanded());
+        }
+        if (request.getHasStrikethrough() != null) {
+            node.setHasStrikethrough(request.getHasStrikethrough());
+        }
+
+        mindMapNodeMapper.updateById(node);
+
+        // Convert entity to DTO for the response
+        // Assuming MindMapNodeDto has been updated to include isExpanded and hasStrikethrough
+        MindMapNodeDto updatedDto = new MindMapNodeDto();
+        updatedDto.setId(node.getId());
+        updatedDto.setParentId(node.getParentId());
+        updatedDto.setDescription(node.getDescription());
+        updatedDto.setRemarks(node.getRemarks());
+        updatedDto.setRequirementId(node.getRequirementId());
+        updatedDto.setBackendDeveloper(node.getBackendDeveloper());
+        updatedDto.setFrontendDeveloper(node.getFrontendDeveloper());
+        updatedDto.setTester(node.getTester());
+        updatedDto.setRequirementReference(node.getRequirementReference());
+        updatedDto.setStatus(node.getStatus());
+        updatedDto.setIsExpanded(node.isExpanded()); // Use Lombok generated getter
+        updatedDto.setHasStrikethrough(node.isHasStrikethrough()); // Use Lombok generated getter
+
+        // Children are not typically loaded/returned on a simple node update response
+        // unless explicitly required. The current getMindMapByRequirementId builds the tree.
+        // If children are needed here, they'd need to be fetched and mapped.
+        // The existing constructor for MindMapNodeDto also needs to be considered if used.
+        // The current DTO constructor was updated to include these new fields.
+        // However, direct field setting like above is also fine.
+
+        return updatedDto;
     }
 }

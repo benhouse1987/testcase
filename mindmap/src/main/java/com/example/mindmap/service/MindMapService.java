@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.mindmap.dto.MindMapNodeDto; // Ensure this import is here
 import com.example.mindmap.dto.BatchCreateNodeDto;
 import com.example.mindmap.dto.RequirementInputDto;
+import com.example.mindmap.dto.UpdateNodeRequest; // Added
 
 public interface MindMapService {
     MindMapNode addNode(MindMapNode node);
@@ -28,4 +29,5 @@ public interface MindMapService {
     MindMapNodeDto createNodesBatch(BatchCreateNodeDto batchCreateNodeDto);
     MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto);
     void moveNode(Long nodeToMoveId, Long newParentNodeId);
+    MindMapNodeDto updateNode(Long id, UpdateNodeRequest request); // Added
 }

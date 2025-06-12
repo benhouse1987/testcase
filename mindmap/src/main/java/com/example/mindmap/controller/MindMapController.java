@@ -6,15 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PutMapping; // Added
+import org.springframework.web.bind.annotation.PathVariable; // Added
 import com.example.mindmap.dto.BatchCreateNodeDto;
 import com.example.mindmap.dto.RequirementInputDto; // New DTO
+import com.example.mindmap.dto.UpdateNodeRequest; // Added
 import javax.validation.Valid;
 import org.slf4j.Logger; // SLF4J Logger
 import org.slf4j.LoggerFactory; // SLF4J LoggerFactory
 
 
 import java.util.List;
-import com.example.mindmap.dto.MindMapNodeDto; // Add this import
+import com.example.mindmap.dto.MindMapNodeDto;
 
 @RestController
 @RequestMapping("/api/mindmap")
@@ -197,5 +200,10 @@ public class MindMapController {
             logger.error("Unexpected error while moving node {} to new parent {}: {}", nodeToMoveId, newParentNodeId, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PutMapping("/nodes/{id}")
+    public MindMapNodeDto updateNode(@PathVariable Long id, @RequestBody UpdateNodeRequest request) {
+        return mindMapService.updateNode(id, request);
     }
 }

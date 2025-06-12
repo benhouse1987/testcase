@@ -456,3 +456,51 @@
     *   `404 Not Found` (未找到):
         *   如果 `nodeToMoveId` 指定的节点不存在。
         *   如果 `newParentNodeId` 指定的目标父节点不存在。
+
+---
+
+## 节点更新API
+
+### PUT /api/mindmap/nodes/{id}
+
+更新指定ID的脑图节点。
+
+**路径参数:**
+
+*   `id` (Long): 必需，要更新的节点的ID。
+
+**请求体 (JSON):**
+
+`UpdateNodeRequest` 对象，包含以下可选字段：
+
+*   `description` (String): 节点描述 (富文本)。
+*   `remarks` (String): 备注 (富文本)。
+*   `requirementId` (String): 需求ID。
+*   `backendDeveloper` (String): 后端开发人员。
+*   `frontendDeveloper` (String): 前端开发人员。
+*   `tester` (String): 测试人员。
+*   `requirementReference` (String): 需求参考 (富文本)。
+*   `status` (Enum): 节点状态 (例如: `PENDING_TEST`, `TESTED`, `CANCELLED`)。
+*   `isExpanded` (Boolean): 节点是否展开 (true/false)。
+*   `hasStrikethrough` (Boolean): 节点内容是否显示删除线 (true/false)。
+
+**请求示例:**
+
+```json
+{
+  "description": "更新后的节点描述",
+  "status": "TESTED",
+  "isExpanded": false,
+  "hasStrikethrough": true
+}
+```
+
+**成功响应 (200 OK):**
+
+返回更新后的 `MindMapNodeDto` 对象，结构与创建和查询节点时返回的节点对象类似，会包含所有节点属性，包括更新后的值。
+
+**失败响应:**
+
+*   `404 Not Found`: 如果具有指定 `id` 的节点未找到。
+*   `400 Bad Request`: 如果请求体无效 (例如，字段类型不匹配)。
+```

@@ -20,12 +20,14 @@ public class MindMapNodeDto {
     private String tester;
     private String requirementReference;
     private NodeStatus status;
+    private Boolean isExpanded; // Added
+    private Boolean hasStrikethrough; // Added
     private List<MindMapNodeDto> children = new ArrayList<>();
 
     // Consider a constructor to map from MindMapNode entity if needed, or use a mapping library
     public MindMapNodeDto(Long id, Long parentId, String description, String remarks, String requirementId,
                           String backendDeveloper, String frontendDeveloper, String tester,
-                          String requirementReference, NodeStatus status) {
+                          String requirementReference, NodeStatus status, Boolean isExpanded, Boolean hasStrikethrough) { // Updated constructor
         this.id = id;
         this.parentId = parentId;
         this.description = description;
@@ -36,5 +38,7 @@ public class MindMapNodeDto {
         this.tester = tester;
         this.requirementReference = requirementReference;
         this.status = status;
+        this.isExpanded = isExpanded; // Added
+        this.hasStrikethrough = hasStrikethrough; // Added
     }
 }
