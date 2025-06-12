@@ -185,9 +185,9 @@ databaseChangeLog:
               - column: {name: requirement_id, value: "REQ-SEARCH-002"}
               - column: {name: status, value: "PENDING_TEST"}
   - changeSet:
-      id: 3 # New changeset ID
+      id: 3
       author: jules_ai_agent
-      comment: "Add is_expanded and has_strikethrough to mind_map_node table" # Added comment
+      comment: "Add is_expanded and has_strikethrough to mind_map_node table"
       changes:
         - addColumn:
             tableName: mind_map_node
@@ -204,3 +204,37 @@ databaseChangeLog:
                   defaultValueBoolean: false
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 4
+      author: jules_ai_agent
+      comment: "Refactor remarks to a separate table (mind_map_node_remarks) and change type to LONGTEXT."
+      changes:
+        - createTable:
+            tableName: mind_map_node_remarks
+            columns:
+              - column:
+                  name: node_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: remarks_text
+                  type: LONGTEXT
+        - addForeignKeyConstraint:
+            baseColumnNames: node_id
+            baseTableName: mind_map_node_remarks
+            constraintName: fk_node_remarks_node_id
+            referencedColumnNames: id
+            referencedTableName: mind_map_node
+            onDelete: CASCADE
+        - sql:
+            comment: "Migrate existing remarks from mind_map_node to mind_map_node_remarks"
+            sql: |
+              INSERT INTO mind_map_node_remarks (node_id, remarks_text)
+              SELECT id, remarks
+              FROM mind_map_node
+              WHERE remarks IS NOT NULL AND remarks != '';
+        - dropColumn:
+            tableName: mind_map_node
+            columnName: remarks

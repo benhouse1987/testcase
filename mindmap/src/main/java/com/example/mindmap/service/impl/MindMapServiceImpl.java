@@ -22,6 +22,8 @@ import com.example.mindmap.dto.MindMapNodeDto; // Added import
 import com.example.mindmap.dto.BatchCreateNodeDto;
 import com.example.mindmap.dto.RequirementInputDto;
 import com.example.mindmap.dto.UpdateNodeRequest; // Added
+import com.example.mindmap.entity.MindMapNodeRemark; // Added
+import com.example.mindmap.mapper.MindMapNodeRemarkMapper; // Added
 import com.example.mindmap.service.openai.OpenAIService;
 import com.example.mindmap.service.openai.dto.GPTTestCaseStructureDto;
 import com.example.mindmap.service.openai.dto.FunctionalPointDto;
@@ -37,6 +39,9 @@ public class MindMapServiceImpl implements MindMapService {
 
     @Autowired
     private MindMapNodeMapper mindMapNodeMapper;
+
+    @Autowired
+    private MindMapNodeRemarkMapper mindMapNodeRemarkMapper; // Added
 
     @Autowired
     private OpenAIService openAIService;
@@ -87,7 +92,9 @@ public class MindMapServiceImpl implements MindMapService {
             dto.setId(node.getId());
             dto.setParentId(node.getParentId());
             dto.setDescription(node.getDescription());
-            dto.setRemarks(node.getRemarks());
+            // dto.setRemarks(node.getRemarks()); // Old field removed
+            MindMapNodeRemark remarkEntityForDto = mindMapNodeRemarkMapper.selectById(node.getId());
+            dto.setRemarks(remarkEntityForDto != null ? remarkEntityForDto.getRemarksText() : null);
             dto.setRequirementId(node.getRequirementId());
             dto.setBackendDeveloper(node.getBackendDeveloper());
             dto.setFrontendDeveloper(node.getFrontendDeveloper());
@@ -187,20 +194,10 @@ public class MindMapServiceImpl implements MindMapService {
     }
 
     @Override
-    @Transactional
-    public MindMapNode updateNodeRemarks(Long nodeId, String remarks) {
-        if (nodeId == null) {
-            throw new IllegalArgumentException("Node ID cannot be null");
-        }
-        MindMapNode node = mindMapNodeMapper.selectById(nodeId);
-        if (node == null) {
-            // Or throw a custom NodeNotFoundException
-            return null;
-        }
-        node.setRemarks(remarks); // Remarks can be empty or null
-        mindMapNodeMapper.updateById(node);
-        return node;
-    }
+    // This method is now obsolete due to remarks handling in updateNode
+    // @Override
+    // @Transactional
+    // public MindMapNode updateNodeRemarks(Long nodeId, String remarks) { ... }
 
     @Override
     @Transactional
@@ -361,9 +358,15 @@ public class MindMapServiceImpl implements MindMapService {
         MindMapNode rootNodeEntity = convertBatchDtoToEntity(batchCreateNodeDto, null); // null for parentId of root
         mindMapNodeMapper.insert(rootNodeEntity); // MyBatis Plus will set the ID on rootNodeEntity after insert
 
+        // Save remarks for the root node
+        if (StringUtils.hasText(batchCreateNodeDto.getRemarks())) {
+            MindMapNodeRemark newRemark = new MindMapNodeRemark(rootNodeEntity.getId(), batchCreateNodeDto.getRemarks());
+            mindMapNodeRemarkMapper.insert(newRemark);
+        }
+
         // Recursively create children
         if (batchCreateNodeDto.getChildren() != null && !batchCreateNodeDto.getChildren().isEmpty()) {
-            createChildrenRecursive(batchCreateNodeDto.getChildren(), rootNodeEntity.getId());
+            createChildrenRecursive(batchCreateNodeDto.getChildren(), rootNodeEntity.getId(), batchCreateNodeDto.getRequirementId()); // Pass reqId for remarks
         }
 
         // After all nodes are created, fetch the complete structure to return as a DTO.
@@ -373,7 +376,7 @@ public class MindMapServiceImpl implements MindMapService {
     private MindMapNode convertBatchDtoToEntity(BatchCreateNodeDto dto, Long parentId) {
         MindMapNode entity = new MindMapNode();
         entity.setDescription(dto.getDescription());
-        entity.setRemarks(dto.getRemarks());
+        // entity.setRemarks(dto.getRemarks()); // Removed, handled separately
         entity.setRequirementId(dto.getRequirementId());
         entity.setBackendDeveloper(dto.getBackendDeveloper());
         entity.setFrontendDeveloper(dto.getFrontendDeveloper());
@@ -385,13 +388,25 @@ public class MindMapServiceImpl implements MindMapService {
         return entity;
     }
 
-    private void createChildrenRecursive(List<BatchCreateNodeDto> childDtos, Long parentId) {
+    private void createChildrenRecursive(List<BatchCreateNodeDto> childDtos, Long parentId, String requirementId) { // Pass requirementId
         for (BatchCreateNodeDto childDto : childDtos) {
+            // Ensure childDto also has requirementId if it can be different from parent
+            // For now, assume childDto.getRequirementId() is correctly set or inherited conceptually
             MindMapNode childNodeEntity = convertBatchDtoToEntity(childDto, parentId);
+            // If childDto doesn't have its own requirementId, set it from parent:
+            if (!StringUtils.hasText(childNodeEntity.getRequirementId())) {
+                 childNodeEntity.setRequirementId(requirementId);
+            }
             mindMapNodeMapper.insert(childNodeEntity); // ID will be set on childNodeEntity
 
+            // Save remarks for the child node
+            if (StringUtils.hasText(childDto.getRemarks())) {
+                MindMapNodeRemark newRemark = new MindMapNodeRemark(childNodeEntity.getId(), childDto.getRemarks());
+                mindMapNodeRemarkMapper.insert(newRemark);
+            }
+
             if (childDto.getChildren() != null && !childDto.getChildren().isEmpty()) {
-                createChildrenRecursive(childDto.getChildren(), childNodeEntity.getId());
+                createChildrenRecursive(childDto.getChildren(), childNodeEntity.getId(), childNodeEntity.getRequirementId()); // Pass current node's reqId
             }
         }
     }
@@ -406,7 +421,9 @@ public class MindMapServiceImpl implements MindMapService {
         nodeDto.setId(nodeEntity.getId());
         nodeDto.setParentId(nodeEntity.getParentId());
         nodeDto.setDescription(nodeEntity.getDescription());
-        nodeDto.setRemarks(nodeEntity.getRemarks());
+        // nodeDto.setRemarks(nodeEntity.getRemarks()); // Old field removed
+        MindMapNodeRemark remarkEntity = mindMapNodeRemarkMapper.selectById(nodeEntity.getId());
+        nodeDto.setRemarks(remarkEntity != null ? remarkEntity.getRemarksText() : null);
         nodeDto.setRequirementId(nodeEntity.getRequirementId());
         nodeDto.setBackendDeveloper(nodeEntity.getBackendDeveloper());
         nodeDto.setFrontendDeveloper(nodeEntity.getFrontendDeveloper());
@@ -588,9 +605,28 @@ public class MindMapServiceImpl implements MindMapService {
         if (request.getDescription() != null) {
             node.setDescription(request.getDescription());
         }
-        if (request.getRemarks() != null) {
-            node.setRemarks(request.getRemarks());
+
+        // Handle remarks update
+        if (request.getRemarks() != null) { // If key "remarks" is present in JSON request
+            MindMapNodeRemark existingRemark = mindMapNodeRemarkMapper.selectById(node.getId());
+            if (request.getRemarks().isEmpty()) {
+                // If remarks are explicitly set to empty string, delete existing remark entry
+                if (existingRemark != null) {
+                    mindMapNodeRemarkMapper.deleteById(node.getId());
+                }
+            } else {
+                // If remarks are provided and not empty, create or update
+                if (existingRemark != null) {
+                    existingRemark.setRemarksText(request.getRemarks());
+                    mindMapNodeRemarkMapper.updateById(existingRemark);
+                } else {
+                    MindMapNodeRemark newRemark = new MindMapNodeRemark(node.getId(), request.getRemarks());
+                    mindMapNodeRemarkMapper.insert(newRemark);
+                }
+            }
         }
+        // If request.getRemarks() is null (key not in JSON), we don't touch existing remarks.
+
         if (request.getRequirementId() != null) {
             node.setRequirementId(request.getRequirementId());
         }
@@ -629,7 +665,9 @@ public class MindMapServiceImpl implements MindMapService {
         updatedDto.setId(node.getId());
         updatedDto.setParentId(node.getParentId());
         updatedDto.setDescription(node.getDescription());
-        updatedDto.setRemarks(node.getRemarks());
+        // updatedDto.setRemarks(node.getRemarks()); // Old field removed
+        MindMapNodeRemark updatedRemarkEntity = mindMapNodeRemarkMapper.selectById(node.getId());
+        updatedDto.setRemarks(updatedRemarkEntity != null ? updatedRemarkEntity.getRemarksText() : null);
         updatedDto.setRequirementId(node.getRequirementId());
         updatedDto.setBackendDeveloper(node.getBackendDeveloper());
         updatedDto.setFrontendDeveloper(node.getFrontendDeveloper());
