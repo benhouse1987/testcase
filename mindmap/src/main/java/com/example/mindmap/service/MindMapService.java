@@ -19,7 +19,6 @@ public interface MindMapService {
 
     // ... existing methods ...
     MindMapNode updateNodeDescription(Long nodeId, String description);
-    MindMapNode updateNodeRemarks(Long nodeId, String remarks);
 
     // ... existing methods ...
     MindMapNode setNodeStatus(Long nodeId, com.example.mindmap.entity.NodeStatus status);
