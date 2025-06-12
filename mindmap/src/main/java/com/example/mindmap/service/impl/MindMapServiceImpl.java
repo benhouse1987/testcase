@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map; // Added import
 import java.util.stream.Collectors; // Added import
+import java.util.function.Function; // Added for explicit typing if needed
 
 import com.example.mindmap.entity.NodeStatus;
 import com.example.mindmap.dto.MindMapNodeDto; // Added import
@@ -81,20 +82,22 @@ public class MindMapServiceImpl implements MindMapService {
             return java.util.Collections.emptyList();
         }
 
-        Map<Long, MindMapNodeDto> map = flatList.stream().map(node ->
-            new MindMapNodeDto(
-                node.getId(),
-                node.getParentId(),
-                node.getDescription(),
-                node.getRemarks(),
-                node.getRequirementId(),
-                node.getBackendDeveloper(),
-                node.getFrontendDeveloper(),
-                node.getTester(),
-                node.getRequirementReference(),
-                node.getStatus()
-            )
-        ).collect(Collectors.toMap(MindMapNodeDto::getId, dto -> dto));
+        Map<Long, MindMapNodeDto> map = flatList.stream().map(node -> {
+            MindMapNodeDto dto = new MindMapNodeDto();
+            dto.setId(node.getId());
+            dto.setParentId(node.getParentId());
+            dto.setDescription(node.getDescription());
+            dto.setRemarks(node.getRemarks());
+            dto.setRequirementId(node.getRequirementId());
+            dto.setBackendDeveloper(node.getBackendDeveloper());
+            dto.setFrontendDeveloper(node.getFrontendDeveloper());
+            dto.setTester(node.getTester());
+            dto.setRequirementReference(node.getRequirementReference());
+            dto.setStatus(node.getStatus());
+            dto.setIsExpanded(node.isExpanded()); // Added mapping
+            dto.setHasStrikethrough(node.isHasStrikethrough()); // Added mapping
+            return dto;
+        }).collect(Collectors.toMap(MindMapNodeDto::getId, (MindMapNodeDto valueDto) -> valueDto));
 
         List<MindMapNodeDto> tree = new ArrayList<>();
         for (MindMapNodeDto dto : map.values()) {
@@ -399,18 +402,19 @@ public class MindMapServiceImpl implements MindMapService {
             return null;
         }
 
-        MindMapNodeDto nodeDto = new MindMapNodeDto(
-            nodeEntity.getId(),
-            nodeEntity.getParentId(),
-            nodeEntity.getDescription(),
-            nodeEntity.getRemarks(),
-            nodeEntity.getRequirementId(),
-            nodeEntity.getBackendDeveloper(),
-            nodeEntity.getFrontendDeveloper(),
-            nodeEntity.getTester(),
-            nodeEntity.getRequirementReference(),
-            nodeEntity.getStatus()
-        );
+        MindMapNodeDto nodeDto = new MindMapNodeDto();
+        nodeDto.setId(nodeEntity.getId());
+        nodeDto.setParentId(nodeEntity.getParentId());
+        nodeDto.setDescription(nodeEntity.getDescription());
+        nodeDto.setRemarks(nodeEntity.getRemarks());
+        nodeDto.setRequirementId(nodeEntity.getRequirementId());
+        nodeDto.setBackendDeveloper(nodeEntity.getBackendDeveloper());
+        nodeDto.setFrontendDeveloper(nodeEntity.getFrontendDeveloper());
+        nodeDto.setTester(nodeEntity.getTester());
+        nodeDto.setRequirementReference(nodeEntity.getRequirementReference());
+        nodeDto.setStatus(nodeEntity.getStatus());
+        nodeDto.setIsExpanded(nodeEntity.isExpanded()); // Added mapping
+        nodeDto.setHasStrikethrough(nodeEntity.isHasStrikethrough()); // Added mapping
 
         // Fetch and set children
         QueryWrapper<MindMapNode> childrenQuery = new QueryWrapper<>();
