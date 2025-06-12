@@ -195,7 +195,6 @@ public class MindMapServiceImpl implements MindMapService {
 
     @Override
     // This method is now obsolete due to remarks handling in updateNode
-    // @Override
     // @Transactional
     // public MindMapNode updateNodeRemarks(Long nodeId, String remarks) { ... }
 
