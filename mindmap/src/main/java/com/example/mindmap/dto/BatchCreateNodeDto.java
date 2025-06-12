@@ -1,6 +1,7 @@
 package com.example.mindmap.dto;
 
 import com.example.mindmap.entity.NodeStatus;
+import lombok.AllArgsConstructor; // Added
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor // Added
 public class BatchCreateNodeDto {
 
     @NotBlank(message = "Description cannot be blank")

@@ -1,6 +1,7 @@
 package com.example.mindmap.dto;
 
 import com.example.mindmap.entity.NodeStatus;
+import lombok.AllArgsConstructor; // Added
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor // Added
 public class MindMapNodeDto {
     private Long id;
     private Long parentId;
@@ -20,25 +22,9 @@ public class MindMapNodeDto {
     private String tester;
     private String requirementReference;
     private NodeStatus status;
-    private Boolean isExpanded; // Added
-    private Boolean hasStrikethrough; // Added
+    private Boolean isExpanded;
+    private Boolean hasStrikethrough;
     private List<MindMapNodeDto> children = new ArrayList<>();
 
-    // Consider a constructor to map from MindMapNode entity if needed, or use a mapping library
-    public MindMapNodeDto(Long id, Long parentId, String description, String remarks, String requirementId,
-                          String backendDeveloper, String frontendDeveloper, String tester,
-                          String requirementReference, NodeStatus status, Boolean isExpanded, Boolean hasStrikethrough) { // Updated constructor
-        this.id = id;
-        this.parentId = parentId;
-        this.description = description;
-        this.remarks = remarks;
-        this.requirementId = requirementId;
-        this.backendDeveloper = backendDeveloper;
-        this.frontendDeveloper = frontendDeveloper;
-        this.tester = tester;
-        this.requirementReference = requirementReference;
-        this.status = status;
-        this.isExpanded = isExpanded; // Added
-        this.hasStrikethrough = hasStrikethrough; // Added
-    }
+    // Manual constructor removed to rely on Lombok's @AllArgsConstructor
 }

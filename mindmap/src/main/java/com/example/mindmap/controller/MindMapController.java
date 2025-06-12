@@ -95,22 +95,25 @@ public class MindMapController {
         }
     }
 
+    // TODO: This endpoint for updating remarks only is likely obsolete.
+    // The functionality should be covered by the main PUT /api/mindmap/nodes/{id} endpoint.
+    // Review if this specific endpoint is still needed or can be removed.
     // Update a node's remarks
     // PUT /api/mindmap/nodes/{nodeId}/remarks
-    @PutMapping("/nodes/{nodeId}/remarks")
-    public ResponseEntity<MindMapNode> updateNodeRemarks(@PathVariable Long nodeId, @RequestBody(required = false) String remarks) {
-        try {
-            MindMapNode updatedNode = mindMapService.updateNodeRemarks(nodeId, remarks);
-            if (updatedNode != null) {
-                return ResponseEntity.ok(updatedNode);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (IllegalArgumentException e) {
-            // This path might not be hit if only nodeId is validated strictly in service for remarks
-            return ResponseEntity.badRequest().body(null); 
-        }
-    }
+    // @PutMapping("/nodes/{nodeId}/remarks")
+    // public ResponseEntity<MindMapNode> updateNodeRemarks(@PathVariable Long nodeId, @RequestBody(required = false) String remarks) {
+    //     try {
+    //         MindMapNode updatedNode = mindMapService.updateNodeRemarks(nodeId, remarks);
+    //         if (updatedNode != null) {
+    //             return ResponseEntity.ok(updatedNode);
+    //         } else {
+    //             return ResponseEntity.notFound().build();
+    //         }
+    //     } catch (IllegalArgumentException e) {
+    //         // This path might not be hit if only nodeId is validated strictly in service for remarks
+    //         return ResponseEntity.badRequest().body(null);
+    //     }
+    // }
 
     // Set the status of a single node
     // PUT /api/mindmap/nodes/{nodeId}/status
