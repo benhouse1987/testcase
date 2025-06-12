@@ -184,3 +184,23 @@ databaseChangeLog:
               - column: {name: description, value: "Search by keyword"}
               - column: {name: requirement_id, value: "REQ-SEARCH-002"}
               - column: {name: status, value: "PENDING_TEST"}
+  - changeSet:
+      id: 3 # New changeset ID
+      author: jules_ai_agent
+      comment: "Add is_expanded and has_strikethrough to mind_map_node table" # Added comment
+      changes:
+        - addColumn:
+            tableName: mind_map_node
+            columns:
+              - column:
+                  name: is_expanded
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: has_strikethrough
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
