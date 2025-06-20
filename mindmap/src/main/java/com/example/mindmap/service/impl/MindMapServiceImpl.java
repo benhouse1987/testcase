@@ -438,8 +438,11 @@ public class MindMapServiceImpl implements MindMapService {
                               "which is an array. Each element in 'functionalPoints' should represent a distinct functional point and have " +
                               "'functionalPointName' (string) and 'testScenarios' (array) keys. Each element in 'testScenarios' should have " +
                               "'testCaseId' (string, e.g., TC-001), 'testCaseGroup' (string, e.g., Smoke Test), " +
-                              "'quotedRequirementText' (string), 'prerequisites' (string), 'testSteps' (string), and 'expectedResults' (string) keys. " +
-                              "Ensure 'quotedRequirementText' includes about 20 characters before and after the relevant part of the original text, with ellipses for the rest.";
+                "'testTarget' (string), 描述测试用例的测试目标, " +
+
+                "'quotedRequirementText' (string), 'prerequisites' (string), 'testSteps' (string), and 'expectedResults' (string) keys. " +
+                            "'remark'(html format string) 汇总 prerequisites，testSteps，expectedResults，，quotedRequirementText，使用中文，格式美观友好"+
+                            "Ensure 'quotedRequirementText' includes about 20 characters before and after the relevant part of the original text, with ellipses for the rest.";
 
         String userPromptPrefix = "Based on the following requirement, generate detailed test cases as per the specified JSON structure. " +
                                   "Divide the requirement into multiple distinct functional test object names. " +
@@ -480,15 +483,8 @@ public class MindMapServiceImpl implements MindMapService {
                     BatchCreateNodeDto scenarioNodeDto = new BatchCreateNodeDto();
                     
                     // Construct rich text description for the scenario node
-                    StringBuilder scenarioDescription = new StringBuilder();
-                    scenarioDescription.append("### Test Scenario: ").append(fpDto.getFunctionalPointName()).append("\n"); // Markdown H3 for scenario title
-                    scenarioDescription.append("**Test Case ID:** ").append(scenarioDto.getTestCaseId()).append("\n");
-                    scenarioDescription.append("**Test Case Group:** ").append(scenarioDto.getTestCaseGroup()).append("\n");
-                    scenarioDescription.append("**Prerequisites:** ").append(scenarioDto.getPrerequisites()).append("\n");
-                    scenarioDescription.append("**Test Steps:**\n").append(scenarioDto.getTestSteps().replace("\n", "\n    ")).append("\n"); // Indent steps
-                    scenarioDescription.append("**Expected Results:** ").append(scenarioDto.getExpectedResults()).append("\n");
-                    
-                    scenarioNodeDto.setDescription(scenarioDescription.toString());
+                    scenarioNodeDto.setDescription(scenarioDto.getTestTarget());
+                    scenarioNodeDto.setRemarks(scenarioDto.getRemark());
                     scenarioNodeDto.setRequirementReference(scenarioDto.getQuotedRequirementText());
                     scenarioNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
                     secondLevelChildren.add(scenarioNodeDto);

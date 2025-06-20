@@ -12,6 +12,10 @@ public class ScenarioDto {
     private String testSteps;             // "测试步骤"
     private String expectedResults;       // "预期结果"
 
+    private String remark;
+
+    private String testTarget;
+
     // Getters and Setters
     public String getTestCaseId() { return testCaseId; }
     public void setTestCaseId(String testCaseId) { this.testCaseId = testCaseId; }
@@ -25,4 +29,20 @@ public class ScenarioDto {
     public void setTestSteps(String testSteps) { this.testSteps = testSteps; }
     public String getExpectedResults() { return expectedResults; }
     public void setExpectedResults(String expectedResults) { this.expectedResults = expectedResults; }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getTestTarget() {
+        return testTarget;
+    }
+
+    public void setTestTarget(String testTarget) {
+        this.testTarget = testTarget;
+    }
 }
