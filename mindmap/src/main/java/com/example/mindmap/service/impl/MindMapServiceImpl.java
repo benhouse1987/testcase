@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.mindmap.entity.MindMapNode;
 import com.example.mindmap.mapper.MindMapNodeMapper;
 import com.example.mindmap.service.MindMapService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ import reactor.core.publisher.Mono; // For handling async call
 
 @Service
 public class MindMapServiceImpl implements MindMapService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MindMapServiceImpl.class);
 
     @Autowired
     private MindMapNodeMapper mindMapNodeMapper;
@@ -432,6 +436,12 @@ public class MindMapServiceImpl implements MindMapService {
     @Override
     @Transactional // This operation should be atomic
     public MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto) {
+        // Delete existing nodes for this requirementId before generating new ones
+        QueryWrapper<MindMapNode> deleteWrapper = new QueryWrapper<>();
+        deleteWrapper.eq("requirement_id", requirementInputDto.getRequirementId());
+        int deletedRows = mindMapNodeMapper.delete(deleteWrapper);
+        logger.info("Deleted {} existing MindMapNode(s) for requirement ID: {}", deletedRows, requirementInputDto.getRequirementId());
+
         // 1. Define Prompts for OpenAI
         String systemPrompt = "You are a senior testing expert. Please write test cases in Chinese for the requirements. " +
                               "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +

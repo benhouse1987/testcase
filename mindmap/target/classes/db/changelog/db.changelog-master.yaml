@@ -1,0 +1,206 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: jules # Changed from MindmapApplication to jules as per instruction
+      changes:
+        - createTable:
+            tableName: mind_map_node
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_mind_map_node_parent
+                    references: mind_map_node(id)
+              - column:
+                  name: description
+                  type: TEXT # Rich text can be long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: remarks
+                  type: TEXT # Rich text can be long
+                  constraints:
+                    nullable: true
+              - column:
+                  name: requirement_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: backend_developer
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: frontend_developer
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: tester
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: requirement_reference
+                  type: TEXT # Rich text can be long
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  defaultValue: "PENDING_TEST"
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: mind_map_node
+            indexName: idx_mind_map_node_parent_id
+            columns:
+              - column:
+                  name: parent_id
+        - createIndex:
+            tableName: mind_map_node
+            indexName: idx_mind_map_node_requirement_id
+            columns:
+              - column:
+                  name: requirement_id
+  - changeSet:
+      id: 2 # Assuming '1' was the table creation
+      author: jules
+      comment: "Insert sample mind map data"
+      changes:
+        # Root Node - Requirement Name
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 100} # Explicit ID for predictability
+              - column: {name: parent_id, value: null}
+              - column: {name: description, value: "User Authentication Module"}
+              - column: {name: remarks, value: "Handles all aspects of user login, registration, and password management."}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: backend_developer, value: "dev_backend_A"}
+              - column: {name: frontend_developer, value: "dev_frontend_X"}
+              - column: {name: tester, value: "tester_Z"}
+              - column: {name: requirement_reference, value: "Link to detailed spec: http://example.com/specs/REQ-AUTH-001"}
+              - column: {name: status, value: "PENDING_TEST"}
+        # Second Level - Functional Points for REQ-AUTH-001
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 101}
+              - column: {name: parent_id, valueNumeric: 100} # Child of "User Authentication Module"
+              - column: {name: description, value: "User Registration"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: status, value: "PENDING_TEST"}
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 102}
+              - column: {name: parent_id, valueNumeric: 100} # Child of "User Authentication Module"
+              - column: {name: description, value: "User Login"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: status, value: "PENDING_TEST"}
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 103}
+              - column: {name: parent_id, valueNumeric: 100} # Child of "User Authentication Module"
+              - column: {name: description, value: "Password Reset"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: status, value: "PENDING_TEST"}
+
+        # Third Level - Test Scenarios for "User Login" (ID 102)
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 201}
+              - column: {name: parent_id, valueNumeric: 102} # Child of "User Login"
+              - column: {name: description, value: "Login with valid credentials"}
+              - column: {name: remarks, value: "Standard success case."}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: tester, value: "tester_A"}
+              - column: {name: status, value: "PENDING_TEST"}
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 202}
+              - column: {name: parent_id, valueNumeric: 102} # Child of "User Login"
+              - column: {name: description, value: "Login with invalid password"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: tester, value: "tester_A"}
+              - column: {name: status, value: "PENDING_TEST"}
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 203}
+              - column: {name: parent_id, valueNumeric: 102} # Child of "User Login"
+              - column: {name: description, value: "Login with non-existent username"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: tester, value: "tester_A"}
+              - column: {name: status, value: "PENDING_TEST"}
+
+        # Third Level - Test Scenarios for "User Registration" (ID 101)
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 204}
+              - column: {name: parent_id, valueNumeric: 101} # Child of "User Registration"
+              - column: {name: description, value: "Register with unique email and strong password"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: status, value: "PENDING_TEST"}
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 205}
+              - column: {name: parent_id, valueNumeric: 101} # Child of "User Registration"
+              - column: {name: description, value: "Register with an already existing email"}
+              - column: {name: requirement_id, value: "REQ-AUTH-001"}
+              - column: {name: status, value: "PENDING_TEST"}
+
+        # Another Root Node - Different Requirement
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 300}
+              - column: {name: parent_id, value: null}
+              - column: {name: description, value: "Product Search Feature"}
+              - column: {name: remarks, value: "Handles searching and filtering products."}
+              - column: {name: requirement_id, value: "REQ-SEARCH-002"}
+              - column: {name: status, value: "PENDING_TEST"}
+        - insert:
+            tableName: mind_map_node
+            columns:
+              - column: {name: id, valueNumeric: 301}
+              - column: {name: parent_id, valueNumeric: 300}
+              - column: {name: description, value: "Search by keyword"}
+              - column: {name: requirement_id, value: "REQ-SEARCH-002"}
+              - column: {name: status, value: "PENDING_TEST"}
+  - changeSet:
+      id: 3 # New changeset ID
+      author: jules_ai_agent
+      comment: "Add is_expanded and has_strikethrough to mind_map_node table" # Added comment
+      changes:
+        - addColumn:
+            tableName: mind_map_node
+            columns:
+              - column:
+                  name: is_expanded
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: has_strikethrough
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
