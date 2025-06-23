@@ -204,3 +204,85 @@ databaseChangeLog:
                   defaultValueBoolean: false
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 4 # New changeset ID for backup table
+      author: jules_ai_agent
+      comment: "Create mind_map_node_bak table for daily backups"
+      changes:
+        - createTable:
+            tableName: mind_map_node_bak
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false # Not auto-incrementing, as it's a copy
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: remarks
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: requirement_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: backend_developer
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: frontend_developer
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: tester
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: requirement_reference
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_expanded
+                  type: boolean
+                  defaultValueBoolean: true # Keep defaults consistent
+                  constraints:
+                    nullable: false
+              - column:
+                  name: has_strikethrough
+                  type: boolean
+                  defaultValueBoolean: false # Keep defaults consistent
+                  constraints:
+                    nullable: false
+              - column:
+                  name: backup_time # New column for backup timestamp
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        # Optional: Add an index on backup_time if frequent queries on this column are expected
+        - createIndex:
+            tableName: mind_map_node_bak
+            indexName: idx_mind_map_node_bak_backup_time
+            columns:
+              - column:
+                  name: backup_time
