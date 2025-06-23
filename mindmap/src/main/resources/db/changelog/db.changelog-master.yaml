@@ -205,7 +205,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
   - changeSet:
-      id: 4 # New changeset ID for backup table
+      id: 5 # New changeset ID for backup table
       author: jules_ai_agent
       comment: "Create mind_map_node_bak table for daily backups"
       changes:
