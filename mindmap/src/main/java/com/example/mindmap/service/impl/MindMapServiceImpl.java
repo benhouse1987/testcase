@@ -450,16 +450,16 @@ public class MindMapServiceImpl implements MindMapService {
                               "'testCaseId' (string, e.g., TC-001), 'testCaseGroup' (string, e.g., Smoke Test), " +
                 "'testTarget' (string), 描述测试用例的测试目标, " +
 
-                "'quotedRequirementText' (string), 'prerequisites' (string), 'testSteps' (string), and 'expectedResults' (string) keys. " +
-                            "'remark'(html format string) 汇总 prerequisites，testSteps，expectedResults，，quotedRequirementText，使用中文，格式美观友好"+
-                            "Ensure 'quotedRequirementText' includes about 20 characters before and after the relevant part of the original text, with ellipses for the rest.";
+                "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的结果，包括报错文案，具体的数据值等) keys. " +
+                            "'remark'(html format string) 汇总 prerequisites，testSteps，expectedResults，quotedRequirementText，expectedResults 需要尽量详细，描述所有具体的预期结果，比如报错的文案等。使用中文，格式美观友好"+
+                            "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
 
         String userPromptPrefix = "Based on the following requirement, generate detailed test cases as per the specified JSON structure. " +
                                   "Divide the requirement into multiple distinct functional test object names. " +
                                   "For each functional point, write corresponding test cases. " +
                                   "Provide as many diverse test cases as possible without repetition of the same validation type. " +
                                   "The 'quotedRequirementText' should be extracted carefully from the original requirement text provided below, " +
-                                  "including approximately 20 characters before and 20 characters after the key segment, using '...' for omitted parts.";
+                                  "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,original requirement text 使用html的加粗格式";
 
         // 2. Call OpenAIService - this is a blocking call for simplicity in this example.
         // In a fully reactive application, you'd continue the reactive chain.

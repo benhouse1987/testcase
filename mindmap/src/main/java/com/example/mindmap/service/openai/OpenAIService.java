@@ -1,5 +1,8 @@
 package com.example.mindmap.service.openai;
 
+import com.example.mindmap.service.impl.MindMapServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,6 +27,7 @@ public class OpenAIService {
     private final WebClient webClient;
     private final String apiKey;
     private final ObjectMapper objectMapper; // For parsing JSON string to DTO
+    private static final Logger logger = LoggerFactory.getLogger(OpenAIService.class);
 
     private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview";
 
@@ -61,6 +65,7 @@ public class OpenAIService {
                         OpenAIChatResponseDto.Choice firstChoice = response.getChoices().get(0);
                         if (firstChoice.getMessage() != null && firstChoice.getMessage().getContent() != null) {
                             String jsonContent = firstChoice.getMessage().getContent();
+                            logger.info("llm response {}",jsonContent);
                             try {
                                 // Parse the JSON string content into GPTTestCaseStructureDto
                                 GPTTestCaseStructureDto structuredContent = objectMapper.readValue(jsonContent, GPTTestCaseStructureDto.class);
