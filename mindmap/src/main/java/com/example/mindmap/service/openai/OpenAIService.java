@@ -70,6 +70,7 @@ public class OpenAIService {
                 .bodyValue(requestDto)
                 .retrieve()
                 .bodyToMono(OpenAIChatResponseDto.class) // Deserialize the outer response to OpenAIChatResponseDto
+                .retry(1)
                 .flatMap(response -> {
                     if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
                         OpenAIChatResponseDto.Choice firstChoice = response.getChoices().get(0);
