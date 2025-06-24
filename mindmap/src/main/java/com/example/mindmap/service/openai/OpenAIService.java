@@ -29,6 +29,8 @@ public class OpenAIService {
     private final ObjectMapper objectMapper; // For parsing JSON string to DTO
     private static final Logger logger = LoggerFactory.getLogger(OpenAIService.class);
 
+//    private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview";
+
     private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview";
 
     public OpenAIService(WebClient.Builder webClientBuilder, @Value("${openai.api.key}") String apiKey, ObjectMapper objectMapper) {
