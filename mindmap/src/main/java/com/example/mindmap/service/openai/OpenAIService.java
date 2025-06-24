@@ -70,6 +70,7 @@ public class OpenAIService {
                 .bodyValue(requestDto)
                 .retrieve()
                 .bodyToMono(OpenAIChatResponseDto.class) // Deserialize the outer response to OpenAIChatResponseDto
+                .doOnError(error -> logger.warn("OpenAI API call failed, attempting retry. Error: {}", error.getMessage()))
                 .retry(1)
                 .flatMap(response -> {
                     if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
