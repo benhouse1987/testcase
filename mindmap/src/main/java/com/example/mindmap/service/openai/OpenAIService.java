@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -14,6 +15,9 @@ import com.example.mindmap.service.openai.dto.OpenAIMessageDto;
 import com.example.mindmap.service.openai.dto.OpenAIChatResponseDto;
 import com.example.mindmap.service.openai.dto.GPTTestCaseStructureDto; // For parsing the content
 import com.fasterxml.jackson.databind.ObjectMapper; // For parsing JSON content
+import reactor.netty.http.client.HttpClient;
+
+import java.time.Duration;
 import java.util.ArrayList; // For creating messages list
 import java.util.List; // For List interface
 import java.util.Map; // For Map interface for responseFormatMap
@@ -34,7 +38,11 @@ public class OpenAIService {
     private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/o1/chat/completions?api-version=2025-01-01-preview";
 
     public OpenAIService(WebClient.Builder webClientBuilder, @Value("${openai.api.key}") String apiKey, ObjectMapper objectMapper) {
-        this.webClient = webClientBuilder.baseUrl(OPENAI_CHAT_COMPLETIONS_URL)
+        this.webClient = webClientBuilder.clientConnector(new ReactorClientHttpConnector(
+                HttpClient.create()
+                        .responseTimeout(Duration.ofMinutes(5))))
+                .baseUrl(OPENAI_CHAT_COMPLETIONS_URL)
+
                                          .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                          .build();
         this.apiKey = apiKey;
