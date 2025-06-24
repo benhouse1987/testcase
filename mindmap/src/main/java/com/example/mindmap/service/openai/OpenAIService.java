@@ -31,7 +31,7 @@ public class OpenAIService {
 
 //    private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview";
 
-    private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview";
+    private static final String OPENAI_CHAT_COMPLETIONS_URL =  "https://huilianyi-ai.openai.azure.com/openai/deployments/o1/chat/completions?api-version=2025-01-01-preview";
 
     public OpenAIService(WebClient.Builder webClientBuilder, @Value("${openai.api.key}") String apiKey, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl(OPENAI_CHAT_COMPLETIONS_URL)
