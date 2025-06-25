@@ -451,7 +451,7 @@ public class MindMapServiceImpl implements MindMapService {
                 "'testTarget' (string), 描述测试用例的测试目标, " +
 
                 "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的结果，包括报错文案，具体的数据值等) keys. " +
-                            "'remark'(html format string， 汇总 prerequisites，testSteps，expectedResults，quotedRequirementText，expectedResults这几个字段的内容，返回完整描述，内容不要引用其他字段。使用中文，格式美观友好"+
+                            "'remark'(html format string， 汇总 prerequisites，testSteps，expectedResults，quotedRequirementText这几个字段的内容，按照固定顺序 返回完整描述，内容不要引用其他字段。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
                             "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
 
         String userPromptPrefix = "Based on the following requirement, generate detailed test cases as per the specified JSON structure. " +
@@ -477,7 +477,7 @@ public class MindMapServiceImpl implements MindMapService {
 
         // 3. Transform GPT response (GPTTestCaseStructureDto) to BatchCreateNodeDto
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
-        rootBatchDto.setDescription(requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
+        rootBatchDto.setDescription( requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
         rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
         // Set other root node properties if necessary, e.g., status
 
@@ -493,7 +493,7 @@ public class MindMapServiceImpl implements MindMapService {
                     BatchCreateNodeDto scenarioNodeDto = new BatchCreateNodeDto();
                     
                     // Construct rich text description for the scenario node
-                    scenarioNodeDto.setDescription(scenarioDto.getTestTarget());
+                    scenarioNodeDto.setDescription(scenarioDto.getTestCaseId()+" "+ scenarioDto.getTestTarget());
                     scenarioNodeDto.setRemarks(scenarioDto.getRemark());
                     scenarioNodeDto.setRequirementReference(scenarioDto.getQuotedRequirementText());
                     scenarioNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
