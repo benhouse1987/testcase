@@ -459,6 +459,51 @@
 
 ---
 
+### 13. 复制节点及其子节点到新父节点下
+*   **POST** `/api/mindmap/nodes/{sourceNodeId}/copy-to/{targetParentNodeId}`
+*   **功能描述**: 复制指定的源节点 (`sourceNodeId`) 及其所有后代节点，并将这整个复制的树结构作为子节点挂载到指定的目标父节点 (`targetParentNodeId`) 下。如果 `targetParentNodeId` 为 `null` 或不存在对应的路径变量 (例如使用特定值如 `0` 或 `root` 并由服务端解释)，则复制的节点树成为新的根节点。 (当前实现要求 `targetParentNodeId` 是一个有效的节点ID，或使用一个能解析为 `null` 的特定路径参数变体，具体取决于服务端如何处理 `null` 父ID的路径参数)。 **当前实现中，`targetParentNodeId` 必须是一个已存在节点的ID，不支持直接通过此路径复制为根节点。如需复制为根，可先复制到某临时父节点下，再将其移动为根节点。**
+*   **路径参数**:
+    *   `sourceNodeId` (Long): 需要复制的源节点的ID。
+    *   `targetParentNodeId` (Long): 复制后的节点树将要挂载到的目标父节点的ID。
+*   **请求体**: 无。
+*   **cURL 示例**:
+    ```bash
+    curl -X POST http://localhost:8080/api/mindmap/nodes/101/copy-to/105
+    ```
+    (此示例表示将 ID 为 101 的节点及其子节点复制一份，并挂载到 ID 为 105 的节点下)
+*   **成功响应 (201 CREATED)**: 返回新创建的根副本节点及其所有子孙副本的 `MindMapNodeDto` 结构。
+    ```json
+    {
+        "id": 201, // 新生成的被复制根节点的ID
+        "parentId": 105, // targetParentNodeId
+        "description": "复制 - 用户注册", // 源节点描述
+        "remarks": "...",
+        "requirementId": "REQ-AUTH-001",
+        // ... 其他从源节点复制的字段 ...
+        "status": "PENDING_TEST",
+        "children": [
+            {
+                "id": 202, // 新生成的被复制子节点的ID
+                "parentId": 201, // 指向新生成的父节点副本
+                "description": "复制 - 子场景1",
+                // ...
+                "children": []
+            }
+            // ... 其他复制的子节点 ...
+        ]
+    }
+    ```
+*   **错误响应**:
+    *   `400 Bad Request`:
+        *   如果 `sourceNodeId` 与 `targetParentNodeId` 相同。
+        *   如果 `targetParentNodeId` 是 `sourceNodeId` 的后代节点之一 (避免循环依赖)。
+    *   `404 Not Found`:
+        *   如果 `sourceNodeId` 指定的源节点不存在。
+        *   如果 `targetParentNodeId` 指定的目标父节点不存在。
+    *   `500 Internal Server Error`: 如果复制过程中发生未预期的服务端错误。
+
+---
+
 ## 节点更新API
 
 ### PUT /api/mindmap/nodes/{id}

@@ -14,6 +14,8 @@ import com.example.mindmap.dto.UpdateNodeRequest; // Added
 import javax.validation.Valid;
 import org.slf4j.Logger; // SLF4J Logger
 import org.slf4j.LoggerFactory; // SLF4J LoggerFactory
+import com.example.mindmap.exception.InvalidOperationException; // Added
+import com.example.mindmap.exception.ResourceNotFoundException; // Added
 
 
 import java.util.List;
@@ -205,5 +207,26 @@ public class MindMapController {
     @PutMapping("/nodes/{id}")
     public MindMapNodeDto updateNode(@PathVariable Long id, @RequestBody UpdateNodeRequest request) {
         return mindMapService.updateNode(id, request);
+    }
+
+    @PostMapping("/nodes/{sourceNodeId}/copy-to/{targetParentNodeId}")
+    public ResponseEntity<MindMapNodeDto> copyNode(
+            @PathVariable Long sourceNodeId,
+            @PathVariable Long targetParentNodeId) {
+        try {
+            MindMapNodeDto copiedNodeDto = mindMapService.copyNodeAndChildren(sourceNodeId, targetParentNodeId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(copiedNodeDto);
+        } catch (ResourceNotFoundException e) {
+            logger.warn("Resource not found during copy operation for sourceNodeId: {}, targetParentNodeId: {}. Message: {}", sourceNodeId, targetParentNodeId, e.getMessage());
+            // Consider returning an error DTO with e.getMessage()
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (InvalidOperationException e) {
+            logger.warn("Invalid operation during copy for sourceNodeId: {}, targetParentNodeId: {}. Message: {}", sourceNodeId, targetParentNodeId, e.getMessage());
+            // Consider returning an error DTO with e.getMessage()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) { // Catch-all for other unexpected errors
+            logger.error("Unexpected error while copying node {} to new parent {}: {}", sourceNodeId, targetParentNodeId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Or an error DTO
+        }
     }
 }

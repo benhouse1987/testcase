@@ -30,4 +30,6 @@ public interface MindMapService {
     MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto);
     void moveNode(Long nodeToMoveId, Long newParentNodeId);
     MindMapNodeDto updateNode(Long id, UpdateNodeRequest request); // Added
+
+    MindMapNodeDto copyNodeAndChildren(Long sourceNodeId, Long targetParentNodeId);
 }
