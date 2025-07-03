@@ -46,9 +46,7 @@ public class MindMapServiceImpl implements MindMapService {
         if (node == null) {
             throw new IllegalArgumentException("Node cannot be null");
         }
-        if (!StringUtils.hasText(node.getDescription())) {
-            throw new IllegalArgumentException("Node description cannot be empty");
-        }
+
         // Ensure status is not null if not set by default (though entity has default)
         if (node.getStatus() == null) {
             node.setStatus(com.example.mindmap.entity.NodeStatus.PENDING_TEST);
