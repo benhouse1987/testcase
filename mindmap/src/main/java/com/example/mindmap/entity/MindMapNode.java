@@ -42,7 +42,7 @@ public class MindMapNode {
     // Status (default: PENDING_TEST)
     private NodeStatus status = NodeStatus.PENDING_TEST;
 
-    private boolean isExpanded = true;
+    private Boolean isExpanded = true;
 
-    private boolean hasStrikethrough = false;
+    private Boolean hasStrikethrough = false;
 }

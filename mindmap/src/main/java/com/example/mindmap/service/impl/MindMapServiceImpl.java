@@ -561,7 +561,7 @@ public class MindMapServiceImpl implements MindMapService {
             statusChanged = true;
         }
         if (request.getIsExpanded() != null) {
-            node.setExpanded(request.getIsExpanded());
+            node.setIsExpanded(request.getIsExpanded());
         }
         if (request.getHasStrikethrough() != null) {
             node.setHasStrikethrough(request.getHasStrikethrough());
