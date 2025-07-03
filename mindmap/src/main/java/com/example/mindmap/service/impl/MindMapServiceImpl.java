@@ -447,7 +447,7 @@ public class MindMapServiceImpl implements MindMapService {
                               "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +
                               "which is an array. Each element in 'functionalPoints' should represent a distinct functional point and have " +
                               "'functionalPointName' (string) and 'testScenarios' (array) keys. Each element in 'testScenarios' should have " +
-                              "'testCaseId' (string, e.g., TC-001), 'testCaseGroup' (string, e.g., Smoke Test), " +
+                              "'testCaseId' (string, e.g., 0010,0020,0030), 'testCaseGroup' (string, e.g., Smoke Test), " +
                 "'testTarget' (string), 描述测试用例的测试目标, " +
 
                 "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的结果，包括报错文案，具体的数据值等) keys. " +
