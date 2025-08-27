@@ -435,6 +435,7 @@ public class MindMapServiceImpl implements MindMapService {
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
         rootBatchDto.setDescription( requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
         rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
+        rootBatchDto.setDescription(requirementInputDto.getOriginalRequirementText());
         // Set other root node properties if necessary, e.g., status
         rootBatchDto.setStatus(NodeStatus.PENDING_TEST); // Default status
 
