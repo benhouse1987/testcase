@@ -409,7 +409,7 @@ public class MindMapServiceImpl implements MindMapService {
                               "'functionalPointName' (string) and 'testScenarios' (array) keys. Each element in 'testScenarios' should have " +
                               "'testCaseId' (string, e.g., 0010,0020,0030), 'testCaseGroup' (string, e.g., Smoke Test), " +
                 "'testTarget' (string), 描述测试用例的测试目标, " +
-                "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的结果，包括报错文案，具体的数据值等) keys. " +
+                "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的检查点，包括报错文案，具体的数据值等，需要具体描述每一个期望点的实际检查内容) keys. " +
                 "'remark'(html format string， 汇总 prerequisites，testSteps，expectedResults，quotedRequirementText这几个字段的内容，按照固定顺序 返回完整描述，内容不要引用其他字段。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
                 "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
 
@@ -418,7 +418,9 @@ public class MindMapServiceImpl implements MindMapService {
                                   "For each functional point, write corresponding test cases. " +
                                   "Provide as many diverse test cases as possible without repetition of the same validation type. " +
                                   "The 'quotedRequirementText' should be extracted carefully from the original requirement text provided below, " +
-                                  "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,original requirement text 使用html的加粗格式";
+                                  "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,original requirement text 使用html的加粗格式." +
+                "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;" +
+                "如果需求新增了配置项，需要测试 各种情形下配置项的初始值逻辑 ";
 
         GPTTestCaseStructureDto gptResponse = openAIService.generateTestCases(
                 requirementInputDto.getOriginalRequirementText(),
