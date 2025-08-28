@@ -420,7 +420,7 @@ public class MindMapServiceImpl implements MindMapService {
                                   "The 'quotedRequirementText' should be extracted carefully from the original requirement text provided below, " +
                                   "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,original requirement text 使用html的加粗格式." +
                 "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;" +
-                "如果需求新增了配置项，需要测试 各种情形下配置项的初始值逻辑 ";
+                "如果需求新增了配置项，需要测试 各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例";
 
         GPTTestCaseStructureDto gptResponse = openAIService.generateTestCases(
                 requirementInputDto.getOriginalRequirementText(),
@@ -435,7 +435,7 @@ public class MindMapServiceImpl implements MindMapService {
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
         rootBatchDto.setDescription( requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
         rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
-        rootBatchDto.setRemarks(requirementInputDto.getOriginalRequirementText());
+        rootBatchDto.setRemarks(requirementInputDto.getDocToken());
         // Set other root node properties if necessary, e.g., status
         rootBatchDto.setStatus(NodeStatus.PENDING_TEST); // Default status
 

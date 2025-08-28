@@ -13,6 +13,8 @@ public class RequirementInputDto {
     @NotBlank(message = "Original requirement text cannot be blank")
     private String originalRequirementText;
 
+    private String docToken;
+
     // Constructors, Getters, and Setters (or use Lombok @Data)
     public RequirementInputDto() {}
 
@@ -28,4 +30,12 @@ public class RequirementInputDto {
     public void setRequirementTitle(String requirementTitle) { this.requirementTitle = requirementTitle; }
     public String getOriginalRequirementText() { return originalRequirementText; }
     public void setOriginalRequirementText(String originalRequirementText) { this.originalRequirementText = originalRequirementText; }
+
+    public String getDocToken() {
+        return docToken;
+    }
+
+    public void setDocToken(String docToken) {
+        this.docToken = docToken;
+    }
 }
