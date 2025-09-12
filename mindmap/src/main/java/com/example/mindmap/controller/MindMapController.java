@@ -2,6 +2,8 @@ package com.example.mindmap.controller;
 
 import com.example.mindmap.entity.MindMapNode;
 import com.example.mindmap.service.MindMapService;
+import com.example.mindmap.utils.ThirdPartyAPITool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import com.example.mindmap.dto.MindMapNodeDto;
 
 @RestController
 @RequestMapping("/api/mindmap")
+@Slf4j
 public class MindMapController {
 
     private static final Logger logger = LoggerFactory.getLogger(MindMapController.class); // SLF4J Logger instance
@@ -228,5 +231,25 @@ public class MindMapController {
             logger.error("Unexpected error while copying node {} to new parent {}: {}", sourceNodeId, targetParentNodeId, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Or an error DTO
         }
+    }
+
+
+
+    @GetMapping("/genTestCase")
+    @ResponseBody
+    public  void genTestCase(@RequestParam String docToken,String rdcNumber,String title){
+        log.info("重新生成脑图 {}",title);
+        RequirementInputDto testCaseRequestDTO = new RequirementInputDto();
+        testCaseRequestDTO.setRequirementId(rdcNumber);
+        testCaseRequestDTO.setRequirementTitle(title);
+        testCaseRequestDTO.setDocToken(docToken);
+
+        String doc=  ThirdPartyAPITool.getDocContent(docToken);
+
+        log.info("获取到了需求原文 {} {}",title, doc);
+        testCaseRequestDTO.setOriginalRequirementText(doc);
+        MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(testCaseRequestDTO);
+
+
     }
 }
