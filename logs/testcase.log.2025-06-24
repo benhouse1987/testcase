@@ -1,0 +1,410 @@
+2025-06-24 09:35:15.090 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-24 09:35:15.096 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-24 11:10:46.276 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-06-24 11:10:46.279 [main] INFO  c.example.mindmap.MindmapApplication - Starting MindmapApplication using Java 1.8.0_341 on DESKTOP-DB1566L with PID 38552 (H:\IdeaProjects\testcase\mindmap\target\classes started by benmars in H:\IdeaProjects\testcase)
+2025-06-24 11:10:46.279 [main] DEBUG c.example.mindmap.MindmapApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+2025-06-24 11:10:46.289 [main] INFO  c.example.mindmap.MindmapApplication - The following 1 profile is active: "dev"
+2025-06-24 11:10:46.922 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 16888 (http)
+2025-06-24 11:10:46.930 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-16888"]
+2025-06-24 11:10:46.930 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-24 11:10:46.930 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-06-24 11:10:46.999 [main] INFO  o.a.c.c.C.[.[localhost].[/mindmap] - Initializing Spring embedded WebApplicationContext
+2025-06-24 11:10:46.999 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 686 ms
+2025-06-24 11:10:47.198 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-24 11:10:47.364 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-24 11:10:47.697 [main] INFO  liquibase.lockservice - Successfully acquired change log lock
+2025-06-24 11:10:47.947 [main] INFO  liquibase.changelog - Reading from testCase.DATABASECHANGELOG
+2025-06-24 11:10:48.194 [main] INFO  liquibase.lockservice - Successfully released change log lock
+2025-06-24 11:10:48.632 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-06-24 11:10:48.672 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 15 mappings in 'requestMappingHandlerMapping'
+2025-06-24 11:10:48.680 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-06-24 11:10:48.683 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-06-24 11:10:48.713 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-16888"]
+2025-06-24 11:10:48.718 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 16888 (http) with context path '/mindmap'
+2025-06-24 11:10:48.725 [main] INFO  c.example.mindmap.MindmapApplication - Started MindmapApplication in 2.65 seconds (JVM running for 2.863)
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] INFO  o.a.c.c.C.[.[localhost].[/mindmap] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@20a1b3ae
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@15994b0b
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-06-24 11:11:06.914 [http-nio-16888-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-06-24 11:11:06.919 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - POST "/mindmap/api/mindmap/generate-from-requirement", parameters={}
+2025-06-24 11:11:06.922 [http-nio-16888-exec-1] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.mindmap.controller.MindMapController#generateAndCreateMindMap(RequirementInputDto)
+2025-06-24 11:11:06.954 [http-nio-16888-exec-1] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.mindmap.dto.RequirementInputDto@716ed540]
+2025-06-24 11:11:06.974 [http-nio-16888-exec-1] INFO  c.e.m.controller.MindMapController - Received request to generate test cases for requirement ID: inf-1129983
+2025-06-24 11:11:06.974 [http-nio-16888-exec-1] DEBUG c.e.m.controller.MindMapController - Full request payload: com.example.mindmap.dto.RequirementInputDto@716ed540
+2025-06-24 11:11:07.040 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.delete - ==>  Preparing: DELETE FROM mind_map_node WHERE (requirement_id = ?)
+2025-06-24 11:11:07.046 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.delete - ==> Parameters: inf-1129983(String)
+2025-06-24 11:11:07.063 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.delete - <==    Updates: 27
+2025-06-24 11:11:07.063 [http-nio-16888-exec-1] INFO  c.e.m.s.impl.MindMapServiceImpl - Deleted 27 existing MindMapNode(s) for requirement ID: inf-1129983
+2025-06-24 11:11:07.090 [http-nio-16888-exec-1] DEBUG o.s.w.r.f.client.ExchangeFunctions - [e9ad33b] HTTP POST https://huilianyi-ai.openai.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview
+2025-06-24 11:11:10.059 [reactor-http-nio-2] DEBUG org.springframework.web.HttpLogging - [e9ad33b] Encoding [com.example.mindmap.service.openai.dto.OpenAIChatRequestDto@25cb52e4]
+2025-06-24 11:11:46.565 [reactor-http-nio-2] DEBUG o.s.w.r.f.client.ExchangeFunctions - [e9ad33b] [f0e7aa52-1] Response 200 OK
+2025-06-24 11:11:47.847 [reactor-http-nio-2] DEBUG org.springframework.web.HttpLogging - [e9ad33b] [f0e7aa52-1] Decoded [com.example.mindmap.service.openai.dto.OpenAIChatResponseDto@6bbe0dde]
+2025-06-24 11:11:47.847 [reactor-http-nio-2] INFO  c.e.m.service.openai.OpenAIService - llm response {
+  "functionalPoints": [
+    {
+      "functionalPointName": "消费商信息批量分配界面字段展示与初始化",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-001",
+          "testCaseGroup": "Smoke Test",
+          "testTarget": "员工菜单-消费商信息批量分配页面新增及初始化滴滴-月限额和高德-月限额字段",
+          "quotedRequirementText": "…员工菜单-消费商信息批量分配页面，增加『<b>滴滴-月限额』，『高德-月限额</b>』 - 初始化 - 老租户：不勾选 - 新租户：默认不勾选…",
+          "prerequisites": "进入员工菜单，消费商信息批量分配页面，存在老租户和新租户两类可选。",
+          "testSteps": "1. 以老租户身份进入消费商信息批量分配页面。\n2. 查看页面字段。\n3. 切换为新租户，再次进入页面。\n4. 查看页面字段。",
+          "expectedResults": "1. 都能看到滴滴-月限额和高德-月限额字段。\n2. 两字段均为可勾选状态，默认均为未勾选（老租户、新租户一致）。",
+          "remark": "<b>前提：</b>进入员工菜单，消费商信息批量分配页面，分别登录老租户和新租户。<br/><b>步骤：</b>分别登录两类租户后，查看『滴滴-月限额』『高德-月限额』字段是否存在，且默认均为未勾选。<br/><b>预期：</b>均显示但默认不勾选。<br/><b>需求片段：</b>…<b>员工菜单-消费商信息批量分配页面，增加『滴滴-月限额』，『高德-月限额』 - 初始化 - 老租户：不勾选 - 新租户：默认不勾选</b>…"
+        },
+        {
+          "testCaseId": "TC-002",
+          "testCaseGroup": "UI Display",
+          "testTarget": "消费商信息页面未配置扩展字段时行为",
+          "quotedRequirementText": "…如果员工-业务对象菜单里没有配置对应扩展字段，则忽略，即不给对应字段赋值…",
+          "prerequisites": "员工-业务对象菜单未配置total_quota/heliosspc_amap_monthquota扩展字段。",
+          "testSteps": "1. 进入员工菜单-消费商信息批量分配页面。\n2. 勾选『滴滴-月限额』『高德-月限额』。\n3. 新建规则并尝试赋值。",
+          "expectedResults": "均未出现可输入的字段值框，配置项被忽略，不对这两个字段进行任何赋值。",
+          "remark": "<b>前提：</b>扩展字段尚未配置。<br/><b>步骤：</b>分配页面勾选字段后新建分配规则。<br/><b>预期：</b>页面及实际数据均未出现赋值情况。<br/><b>需求片段：</b>…<b>如果员工-业务对象菜单里没有配置对应扩展字段，则忽略，即不给对应字段赋值</b>…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "新建及编辑批量分配规则下拉与多语言",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-003",
+          "testCaseGroup": "UI Display",
+          "testTarget": "新建规则侧拉框分配字段下拉列表检查及多语言显示",
+          "quotedRequirementText": "…【新建规则】侧拉框 - 分配字段 - 下拉增加：<b>滴滴-月限额、高德-月限额</b>…滴滴-月限额 - 英文：DiDi - Monthly Limit - 日文：DiDi - 月額上限 - 繁体：滴滴-月限額…高德-月限额 - 英文：Amap - Monthly Limit - 日文：Amap - 月額上限 - 繁体：高德-月限額…",
+          "prerequisites": "进入消费商信息批量分配页面，可切换多语言（中文、英文、日文、繁体）。",
+          "testSteps": "1. 依次切换多语言。\n2. 点击“新建规则”。\n3. 查看“分配字段”下拉选项。",
+          "expectedResults": "可见滴滴-月限额、高德-月限额，且各语言分别显示对应的名称：\n- 英文：DiDi - Monthly Limit、Amap - Monthly Limit\n- 日文：DiDi - 月額上限、Amap - 月額上限\n- 繁体：滴滴-月限額、高德-月限額\n- 简体中文：滴滴-月限额，高德-月限额",
+          "remark": "<b>前提：</b>已配多语言环境。<br/><b>步骤：</b>切换每种语言，新建规则，检查下拉显示字段及多语言内容。<br/><b>预期：</b>各自语种下，名称无误。<br/><b>需求片段：</b>…【新建规则】侧拉框 - 分配字段 - 下拉增加：<b>滴滴-月限额、高德-月限额</b>…滴滴-月限额 - 英文：DiDi - Monthly Limit - 日文：DiDi - 月額上限 - 繁体：滴滴-月限額…高德-月限额 - 英文：Amap - Monthly Limit - 日文：Amap - 月額上限 - 繁体：高德-月限額…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "数字输入与校验（新建编辑分配规则）",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-004",
+          "testCaseGroup": "Input Validation",
+          "testTarget": "滴滴-月限额和高德-月限额字段仅能输入整数+小数不超过15位",
+          "quotedRequirementText": "…字段值为：数字输入框；按如下校验：<b>整数+小数位数不超过15位</b>…",
+          "prerequisites": "员工菜单-消费商信息批量分配页面，字段已正确显示可配置。",
+          "testSteps": "1. 新建分配规则，选择『滴滴-月限额』，在数字输入框输入超过15位数字（如123456789012345.67）。\n2. 输入14位整数+2位小数（共16位）\n3. 输入15位纯整数（如：123456789012345）\n4. 输入小数共14位（如：0.12345678901234）",
+          "expectedResults": "1. 16位数字输入被拒绝，提示“整数加小数位最多不超过15位”。\n2. 15位数字输入可保存。\n3. 14位整数+1位小数可保存。\n4. 14位小数可保存。",
+          "remark": "<b>前提：</b>正常新建/编辑分配规则。<br/><b>步骤：</b>对输入框边界位数进行尝试。<br/><b>预期：</b>超过15位报错“整数加小数位最多不超过15位”，等于或小于15位可保存。<br/><b>需求片段：</b>…<b>字段值为：数字输入框；按如下校验：整数+小数位数不超过15位</b>…"
+        },
+        {
+          "testCaseId": "TC-005",
+          "testCaseGroup": "Input Validation",
+          "testTarget": "滴滴/高德月限额数字输入框允许清空已录入值",
+          "quotedRequirementText": "…【字段值】<b>允许清空</b>…",
+          "prerequisites": "已成功新建分配规则并设置字段值（如2000）。",
+          "testSteps": "1. 进入分配规则编辑页面。\n2. 将滴滴月限额字段值手动清空。\n3. 保存。",
+          "expectedResults": "保存成功，无报错。字段值为null/空值状态。",
+          "remark": "<b>前提：</b>有非空字段值。<br/><b>步骤：</b>编辑时将其清空并保存。<br/><b>预期：</b>保存成功，数字框可清空。数据库或接口查询该字段为null/空。<br/><b>需求片段：</b>…<b>【字段值】允许清空</b>…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "操作审计记录",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-006",
+          "testCaseGroup": "Audit & Log",
+          "testTarget": "滴滴-月限额和高德-月限额勾选/取消勾选、规则新建/编辑均需被记录审计",
+          "quotedRequirementText": "…操作审计：- 『滴滴-月限额』、『<b>滴滴-月限额』勾选、取消勾选操作-『滴滴-月限额』、『滴滴-月限额』的新建、编辑分配规则操作</b>…",
+          "prerequisites": "系统已开启审计日志功能。",
+          "testSteps": "1. 勾选『滴滴-月限额』保存。\n2. 取消勾选『滴滴-月限额』保存。\n3. 新建分配规则，选择『高德-月限额』并保存。\n4. 编辑并变更『高德-月限额』值。\n5. 查看操作审计日志。",
+          "expectedResults": "操作审计日志中完整记录上述四个行为（勾选、取消勾选、新建、编辑），每条日志项应显示操作人、操作时间、操作类型及涉及字段。",
+          "remark": "<b>前提：</b>开启日志。<br/><b>步骤：</b>勾选、取消勾选、新建、编辑分配规则，并查审计日志。<br/><b>预期：</b>上述所有操作在审计日志中有详实记录，包括操作类型及字段。<br/><b>需求片段：</b>…<b>操作审计：- 『滴滴-月限额』、『滴滴-月限额』勾选、取消勾选操作 - 『滴滴-月限额』、『滴滴-月限额』的新建、编辑分配规则操作</b>…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "员工信息导入/模板导入限制",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-007",
+          "testCaseGroup": "Import Validation",
+          "testTarget": "导入员工数据时扩展字段total_quota或heliosspc_amap_monthquota有值时报错",
+          "quotedRequirementText": "…导入时，开启了消费商信息批量分配的字段，都必须为空；- <b>创建人员导入时，如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入</b>；…",
+          "prerequisites": "消费商信息批量分配已开启且勾选了滴滴-月限额或高德-月限额。",
+          "testSteps": "1. 下载内部或外部员工信息模板。\n2. 在扩展字段total_quota或heliosspc_amap_monthquota列填写任意值（如1000）。\n3. 上传并导入员工数据。",
+          "expectedResults": "导入失败，报错：“消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入”；如勾选高德时报错控件编码为heliosspc_amap_monthquota。",
+          "remark": "<b>前提：</b>开启批量分配，勾选相关字段。<br/><b>步骤：</b>模板填写非空值并导入。<br/><b>预期：</b>导入失败，明确报错，文案需与需求一致。<br/><b>需求片段：</b>…<b>创建人员导入时，如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入；</b>…"
+        },
+        {
+          "testCaseId": "TC-008",
+          "testCaseGroup": "Import Validation",
+          "testTarget": "扩展字段模板导入带值时校验",
+          "quotedRequirementText": "…员工菜单-内部员工tab-员工扩展字段模板- <b>如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入</b>；…",
+          "prerequisites": "配好员工扩展字段模板，已开启批量分配勾选项。",
+          "testSteps": "1. 填写扩展字段模板（total_quota/heliosspc_amap_monthquota）为非空。\n2. 导入模板。",
+          "expectedResults": "导入失败，报错：“消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入。”",
+          "remark": "<b>前提：</b>扩展字段模板导入，带值。<br/><b>步骤：</b>提交有值字段进行导入。<br/><b>预期：</b>报错文案严格一致。<br/><b>需求片段：</b>…<b>员工菜单-内部员工tab-员工扩展字段模板-如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入；</b>…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "前端界面修改限制（字段禁用/灰显）",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-009",
+          "testCaseGroup": "UI Restriction",
+          "testTarget": "员工菜单扩展字段禁用（灰显）",
+          "quotedRequirementText": "…界面不允许修改，对应字段灰显：- 员工菜单-内部员工tab/外部员工tab-扩展字段total_quota或heliosspc_amap_monthquota…",
+          "prerequisites": "批量分配已勾选滴滴-月限额或高德-月限额。",
+          "testSteps": "1. 进入员工菜单-内部员工tab，查找扩展字段total_quota/heliosspc_amap_monthquota。\n2. 进入外部员工tab，同上。",
+          "expectedResults": "两个字段均为灰色禁用状态，不可进行任何编辑或输入。",
+          "remark": "<b>前提：</b>对应字段生效。<br/><b>步骤：</b>尝试在页面编辑，字段无法修改。<br/><b>预期：</b>两个扩展字段均灰显不可编辑。<br/><b>需求片段：</b>…<b>界面不允许修改，对应字段灰显：- 员工菜单-内部员工tab/外部员工tab-扩展字段total_quota或heliosspc_amap_monthquota</b>…"
+        },
+        {
+          "testCaseId": "TC-010",
+          "testCaseGroup": "UI Restriction",
+          "testTarget": "我的外部员工-申请单/单据选人控件字段禁用",
+          "quotedRequirementText": "…界面不允许修改，对应字段灰显…- 我的外部员工菜单-外部员工申请单-扩展字段total_quota或heliosspc_amap_monthquota…- 移动端业务单据选人控件创建外部员工-扩展字段…",
+          "prerequisites": "我的外部员工模块生效，已新建外部员工申请单/业务单据。",
+          "testSteps": "1. 新建外部员工申请单，查找扩展字段。\n2. 手机端新建业务单据关联选人，查找对应扩展字段。",
+          "expectedResults": "PC端/移动端所有涉及页面扩展字段均灰显禁用。",
+          "remark": "<b>前提：</b>服务端及移动端界面。<br/><b>步骤：</b>查找字段，并尝试修改。<br/><b>预期：</b>全部禁用，不允许编辑。<br/><b>需求片段：</b>…<b>界面不允许修改，对应字段灰显…- 我的外部员工菜单-外部员工申请单-扩展字段total_quota或heliosspc_amap_monthquota…- 移动端业务单据选人控件创建外部员工-扩展字段</b>…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "OpenAPI接口操作限制",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-011",
+          "testCaseGroup": "API Restriction",
+          "testTarget": "OpenAPI接口不允许创建/更新扩展字段滴滴-月限额或高德-月限额",
+          "quotedRequirementText": "…OpenAPI不允许创建和更新扩展字段total_quota或heliosspc_amap_monthquota- <b>内部员工和外部员工的创建员工、更新员工</b>…",
+          "prerequisites": "有OpenAPI接入权限，编写好OpenAPI请求体。",
+          "testSteps": "1. 调用OpenAPI，参数中带有total_quota/heliosspc_amap_monthquota字段进行创建。\n2. 调用OpenAPI，参数中带有这两个字段进行更新。",
+          "expectedResults": "API返回错误，禁止创建/更新，并返回明确的错误信息：“扩展字段total_quota/heliosspc_amap_monthquota不允许操作。”",
+          "remark": "<b>前提：</b>开发者能使用OpenAPI。\n<b>步骤：</b>新建/更新请求都包含这两个扩展字段。\n<b>预期：</b>均返回错误，且错误信息准确。\n<b>需求片段：</b>…<b>OpenAPI不允许创建和更新扩展字段total_quota或heliosspc_amap_monthquota- 内部员工和外部员工的创建员工、更新员工</b>…"
+        }
+      ]
+    },
+    {
+      "functionalPointName": "迁移中心配置及比对逻辑",
+      "testScenarios": [
+        {
+          "testCaseId": "TC-012",
+          "testCaseGroup": "Migration",
+          "testTarget": "迁移中心新加配置及比对滴滴-月限额、高德-月限额",
+          "quotedRequirementText": "…迁移中心-比对- <b>新加的配置：滴滴-月限额、高德-月限额的勾选项和对应的规则比对</b>…",
+          "prerequisites": "已配置好迁移方案，原系统/新系统均支持这些字段。",
+          "testSteps": "1. 迁移或同步包含滴滴-月限额、高德-月限额配置信息。\n2. 进入比对界面，查看两个字段及其分配规则。",
+          "expectedResults": "迁移中心成功比对出滴滴-月限额、高德-月限额的勾选项及所有相关分配规则信息，展示差异。",
+          "remark": "<b>前提：</b>有需要比对的新老配置。<br/><b>步骤：</b>同步及比对迁移，查看两字段及勾选项差异和规则比对。<br/><b>预期：</b>可见比对项且逻辑正确。<br/><b>需求片段：</b>…<b>迁移中心-比对-新加的配置：滴滴-月限额、高德-月限额的勾选项和对应的规则比对</b>…"
+        }
+      ]
+    }
+  ]
+}
+2025-06-24 11:11:47.852 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.853 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: inf-1129983 【王宇】【前端/后端】附件格式支持jfif(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.870 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.871 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.871 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 消费商信息批量分配界面字段展示与初始化(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.888 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.888 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.888 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 642(Long), 员工菜单-消费商信息批量分配页面新增及初始化滴滴-月限额和高德-月限额字段(String), <b>前提：</b>进入员工菜单，消费商信息批量分配页面，分别登录老租户和新租户。<br/><b>步骤：</b>分别登录两类租户后，查看『滴滴-月限额』『高德-月限额』字段是否存在，且默认均为未勾选。<br/><b>预期：</b>均显示但默认不勾选。<br/><b>需求片段：</b>…<b>员工菜单-消费商信息批量分配页面，增加『滴滴-月限额』，『高德-月限额』 - 初始化 - 老租户：不勾选 - 新租户：默认不勾选</b>…(String), inf-1129983(String), …员工菜单-消费商信息批量分配页面，增加『<b>滴滴-月限额』，『高德-月限额</b>』 - 初始化 - 老租户：不勾选 - 新租户：默认不勾选…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.906 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.907 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.907 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 642(Long), 消费商信息页面未配置扩展字段时行为(String), <b>前提：</b>扩展字段尚未配置。<br/><b>步骤：</b>分配页面勾选字段后新建分配规则。<br/><b>预期：</b>页面及实际数据均未出现赋值情况。<br/><b>需求片段：</b>…<b>如果员工-业务对象菜单里没有配置对应扩展字段，则忽略，即不给对应字段赋值</b>…(String), inf-1129983(String), …如果员工-业务对象菜单里没有配置对应扩展字段，则忽略，即不给对应字段赋值…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.924 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.924 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.924 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 新建及编辑批量分配规则下拉与多语言(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.941 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.941 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.942 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 645(Long), 新建规则侧拉框分配字段下拉列表检查及多语言显示(String), <b>前提：</b>已配多语言环境。<br/><b>步骤：</b>切换每种语言，新建规则，检查下拉显示字段及多语言内容。<br/><b>预期：</b>各自语种下，名称无误。<br/><b>需求片段：</b>…【新建规则】侧拉框 - 分配字段 - 下拉增加：<b>滴滴-月限额、高德-月限额</b>…滴滴-月限额 - 英文：DiDi - Monthly Limit - 日文：DiDi - 月額上限 - 繁体：滴滴-月限額…高德-月限额 - 英文：Amap - Monthly Limit - 日文：Amap - 月額上限 - 繁体：高德-月限額…(String), inf-1129983(String), …【新建规则】侧拉框 - 分配字段 - 下拉增加：<b>滴滴-月限额、高德-月限额</b>…滴滴-月限额 - 英文：DiDi - Monthly Limit - 日文：DiDi - 月額上限 - 繁体：滴滴-月限額…高德-月限额 - 英文：Amap - Monthly Limit - 日文：Amap - 月額上限 - 繁体：高德-月限額…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.959 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.960 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.960 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 数字输入与校验（新建编辑分配规则）(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.975 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.976 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.976 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 647(Long), 滴滴-月限额和高德-月限额字段仅能输入整数+小数不超过15位(String), <b>前提：</b>正常新建/编辑分配规则。<br/><b>步骤：</b>对输入框边界位数进行尝试。<br/><b>预期：</b>超过15位报错“整数加小数位最多不超过15位”，等于或小于15位可保存。<br/><b>需求片段：</b>…<b>字段值为：数字输入框；按如下校验：整数+小数位数不超过15位</b>…(String), inf-1129983(String), …字段值为：数字输入框；按如下校验：<b>整数+小数位数不超过15位</b>…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:47.992 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:47.993 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:47.993 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 647(Long), 滴滴/高德月限额数字输入框允许清空已录入值(String), <b>前提：</b>有非空字段值。<br/><b>步骤：</b>编辑时将其清空并保存。<br/><b>预期：</b>保存成功，数字框可清空。数据库或接口查询该字段为null/空。<br/><b>需求片段：</b>…<b>【字段值】允许清空</b>…(String), inf-1129983(String), …【字段值】<b>允许清空</b>…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.011 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.012 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.012 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 操作审计记录(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.029 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.031 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.031 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 650(Long), 滴滴-月限额和高德-月限额勾选/取消勾选、规则新建/编辑均需被记录审计(String), <b>前提：</b>开启日志。<br/><b>步骤：</b>勾选、取消勾选、新建、编辑分配规则，并查审计日志。<br/><b>预期：</b>上述所有操作在审计日志中有详实记录，包括操作类型及字段。<br/><b>需求片段：</b>…<b>操作审计：- 『滴滴-月限额』、『滴滴-月限额』勾选、取消勾选操作 - 『滴滴-月限额』、『滴滴-月限额』的新建、编辑分配规则操作</b>…(String), inf-1129983(String), …操作审计：- 『滴滴-月限额』、『<b>滴滴-月限额』勾选、取消勾选操作-『滴滴-月限额』、『滴滴-月限额』的新建、编辑分配规则操作</b>…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.048 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.048 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.049 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 员工信息导入/模板导入限制(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.065 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.066 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.066 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 652(Long), 导入员工数据时扩展字段total_quota或heliosspc_amap_monthquota有值时报错(String), <b>前提：</b>开启批量分配，勾选相关字段。<br/><b>步骤：</b>模板填写非空值并导入。<br/><b>预期：</b>导入失败，明确报错，文案需与需求一致。<br/><b>需求片段：</b>…<b>创建人员导入时，如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入；</b>…(String), inf-1129983(String), …导入时，开启了消费商信息批量分配的字段，都必须为空；- <b>创建人员导入时，如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入</b>；…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.083 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.084 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.084 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 652(Long), 扩展字段模板导入带值时校验(String), <b>前提：</b>扩展字段模板导入，带值。<br/><b>步骤：</b>提交有值字段进行导入。<br/><b>预期：</b>报错文案严格一致。<br/><b>需求片段：</b>…<b>员工菜单-内部员工tab-员工扩展字段模板-如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入；</b>…(String), inf-1129983(String), …员工菜单-内部员工tab-员工扩展字段模板- <b>如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入</b>；…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.100 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.101 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.102 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 前端界面修改限制（字段禁用/灰显）(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.118 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.119 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.120 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 655(Long), 员工菜单扩展字段禁用（灰显）(String), <b>前提：</b>对应字段生效。<br/><b>步骤：</b>尝试在页面编辑，字段无法修改。<br/><b>预期：</b>两个扩展字段均灰显不可编辑。<br/><b>需求片段：</b>…<b>界面不允许修改，对应字段灰显：- 员工菜单-内部员工tab/外部员工tab-扩展字段total_quota或heliosspc_amap_monthquota</b>…(String), inf-1129983(String), …界面不允许修改，对应字段灰显：- 员工菜单-内部员工tab/外部员工tab-扩展字段total_quota或heliosspc_amap_monthquota…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.136 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.137 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.137 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 655(Long), 我的外部员工-申请单/单据选人控件字段禁用(String), <b>前提：</b>服务端及移动端界面。<br/><b>步骤：</b>查找字段，并尝试修改。<br/><b>预期：</b>全部禁用，不允许编辑。<br/><b>需求片段：</b>…<b>界面不允许修改，对应字段灰显…- 我的外部员工菜单-外部员工申请单-扩展字段total_quota或heliosspc_amap_monthquota…- 移动端业务单据选人控件创建外部员工-扩展字段</b>…(String), inf-1129983(String), …界面不允许修改，对应字段灰显…- 我的外部员工菜单-外部员工申请单-扩展字段total_quota或heliosspc_amap_monthquota…- 移动端业务单据选人控件创建外部员工-扩展字段…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.153 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.153 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.153 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), OpenAPI接口操作限制(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.170 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.170 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.170 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 658(Long), OpenAPI接口不允许创建/更新扩展字段滴滴-月限额或高德-月限额(String), <b>前提：</b>开发者能使用OpenAPI。
+<b>步骤：</b>新建/更新请求都包含这两个扩展字段。
+<b>预期：</b>均返回错误，且错误信息准确。
+<b>需求片段：</b>…<b>OpenAPI不允许创建和更新扩展字段total_quota或heliosspc_amap_monthquota- 内部员工和外部员工的创建员工、更新员工</b>…(String), inf-1129983(String), …OpenAPI不允许创建和更新扩展字段total_quota或heliosspc_amap_monthquota- <b>内部员工和外部员工的创建员工、更新员工</b>…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.187 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.187 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, requirement_id, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.187 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 641(Long), 迁移中心配置及比对逻辑(String), inf-1129983(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.202 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.203 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==>  Preparing: INSERT INTO mind_map_node ( parent_id, description, remarks, requirement_id, requirement_reference, status, is_expanded, has_strikethrough ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )
+2025-06-24 11:11:48.203 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - ==> Parameters: 660(Long), 迁移中心新加配置及比对滴滴-月限额、高德-月限额(String), <b>前提：</b>有需要比对的新老配置。<br/><b>步骤：</b>同步及比对迁移，查看两字段及勾选项差异和规则比对。<br/><b>预期：</b>可见比对项且逻辑正确。<br/><b>需求片段：</b>…<b>迁移中心-比对-新加的配置：滴滴-月限额、高德-月限额的勾选项和对应的规则比对</b>…(String), inf-1129983(String), …迁移中心-比对- <b>新加的配置：滴滴-月限额、高德-月限额的勾选项和对应的规则比对</b>…(String), PENDING_TEST(String), true(Boolean), false(Boolean)
+2025-06-24 11:11:48.219 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.insert - <==    Updates: 1
+2025-06-24 11:11:48.220 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.221 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 641(Long)
+2025-06-24 11:11:48.233 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.233 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.234 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 641(Long)
+2025-06-24 11:11:48.242 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 8
+2025-06-24 11:11:48.243 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.243 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 642(Long)
+2025-06-24 11:11:48.251 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.252 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.252 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 642(Long)
+2025-06-24 11:11:48.261 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 2
+2025-06-24 11:11:48.261 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.261 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 643(Long)
+2025-06-24 11:11:48.269 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.269 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.269 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 643(Long)
+2025-06-24 11:11:48.278 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.278 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.278 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 644(Long)
+2025-06-24 11:11:48.286 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.287 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.287 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 644(Long)
+2025-06-24 11:11:48.295 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.295 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.295 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 645(Long)
+2025-06-24 11:11:48.303 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.303 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.304 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 645(Long)
+2025-06-24 11:11:48.312 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 1
+2025-06-24 11:11:48.313 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.313 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 646(Long)
+2025-06-24 11:11:48.321 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.321 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.321 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 646(Long)
+2025-06-24 11:11:48.329 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.329 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.329 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 647(Long)
+2025-06-24 11:11:48.338 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.338 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.338 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 647(Long)
+2025-06-24 11:11:48.346 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 2
+2025-06-24 11:11:48.347 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.347 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 648(Long)
+2025-06-24 11:11:48.356 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.357 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.357 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 648(Long)
+2025-06-24 11:11:48.365 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.366 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.366 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 649(Long)
+2025-06-24 11:11:48.374 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.374 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.374 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 649(Long)
+2025-06-24 11:11:48.383 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.383 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.383 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 650(Long)
+2025-06-24 11:11:48.391 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.392 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.392 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 650(Long)
+2025-06-24 11:11:48.401 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 1
+2025-06-24 11:11:48.401 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.401 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 651(Long)
+2025-06-24 11:11:48.409 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.409 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.410 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 651(Long)
+2025-06-24 11:11:48.418 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.418 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.418 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 652(Long)
+2025-06-24 11:11:48.426 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.427 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.427 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 652(Long)
+2025-06-24 11:11:48.435 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 2
+2025-06-24 11:11:48.435 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.435 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 653(Long)
+2025-06-24 11:11:48.443 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.444 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.444 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 653(Long)
+2025-06-24 11:11:48.453 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.453 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.453 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 654(Long)
+2025-06-24 11:11:48.461 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.462 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.462 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 654(Long)
+2025-06-24 11:11:48.470 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.471 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.471 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 655(Long)
+2025-06-24 11:11:48.479 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.480 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.481 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 655(Long)
+2025-06-24 11:11:48.489 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 2
+2025-06-24 11:11:48.489 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.489 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 656(Long)
+2025-06-24 11:11:48.498 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.498 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.498 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 656(Long)
+2025-06-24 11:11:48.506 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.506 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.506 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 657(Long)
+2025-06-24 11:11:48.513 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.513 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.515 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 657(Long)
+2025-06-24 11:11:48.522 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.522 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.523 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 658(Long)
+2025-06-24 11:11:48.530 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.531 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.531 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 658(Long)
+2025-06-24 11:11:48.539 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 1
+2025-06-24 11:11:48.539 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.539 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 659(Long)
+2025-06-24 11:11:48.547 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.547 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.547 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 659(Long)
+2025-06-24 11:11:48.556 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.556 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.556 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 660(Long)
+2025-06-24 11:11:48.564 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.565 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.565 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 660(Long)
+2025-06-24 11:11:48.573 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 1
+2025-06-24 11:11:48.573 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE id=?
+2025-06-24 11:11:48.574 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - ==> Parameters: 661(Long)
+2025-06-24 11:11:48.581 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectById - <==      Total: 1
+2025-06-24 11:11:48.582 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==>  Preparing: SELECT id,parent_id,description,remarks,requirement_id,backend_developer,frontend_developer,tester,requirement_reference,status,is_expanded,has_strikethrough FROM mind_map_node WHERE (parent_id = ?)
+2025-06-24 11:11:48.582 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - ==> Parameters: 661(Long)
+2025-06-24 11:11:48.590 [http-nio-16888-exec-1] DEBUG c.e.m.m.MindMapNodeMapper.selectList - <==      Total: 0
+2025-06-24 11:11:48.612 [http-nio-16888-exec-1] INFO  c.e.m.controller.MindMapController - Successfully generated and saved test cases for requirement ID: inf-1129983. Returning root node ID: 641
+2025-06-24 11:11:48.612 [http-nio-16888-exec-1] DEBUG c.e.m.controller.MindMapController - Full response payload: MindMapNodeDto(id=641, parentId=null, description=inf-1129983 【王宇】【前端/后端】附件格式支持jfif, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=642, parentId=641, description=消费商信息批量分配界面字段展示与初始化, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=643, parentId=642, description=员工菜单-消费商信息批量分配页面新增及初始化滴滴-月限额和高德-月限额字段, remarks=<b>前提：</b>进入员工菜单，消费商信息批量分配页面，分别登录老租户和新租户。<br/><b>步骤：</b>分别登录两类租户后，查看『滴滴-月限额』『高德-月限额』字段是否存在，且默认均为未勾选。<br/><b>预期：</b>均显示但默认不勾选。<br/><b>需求片段：</b>…<b>员工菜单-消费商信息批量分配页面，增加『滴滴-月限额』，『高德-月限额』 - 初始化 - 老租户：不勾选 - 新租户：默认不勾选</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…员工菜单-消费商信息批量分配页面，增加『<b>滴滴-月限额』，『高德-月限额</b>』 - 初始化 - 老租户：不勾选 - 新租户：默认不勾选…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[]), MindMapNodeDto(id=644, parentId=642, description=消费商信息页面未配置扩展字段时行为, remarks=<b>前提：</b>扩展字段尚未配置。<br/><b>步骤：</b>分配页面勾选字段后新建分配规则。<br/><b>预期：</b>页面及实际数据均未出现赋值情况。<br/><b>需求片段：</b>…<b>如果员工-业务对象菜单里没有配置对应扩展字段，则忽略，即不给对应字段赋值</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…如果员工-业务对象菜单里没有配置对应扩展字段，则忽略，即不给对应字段赋值…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=645, parentId=641, description=新建及编辑批量分配规则下拉与多语言, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=646, parentId=645, description=新建规则侧拉框分配字段下拉列表检查及多语言显示, remarks=<b>前提：</b>已配多语言环境。<br/><b>步骤：</b>切换每种语言，新建规则，检查下拉显示字段及多语言内容。<br/><b>预期：</b>各自语种下，名称无误。<br/><b>需求片段：</b>…【新建规则】侧拉框 - 分配字段 - 下拉增加：<b>滴滴-月限额、高德-月限额</b>…滴滴-月限额 - 英文：DiDi - Monthly Limit - 日文：DiDi - 月額上限 - 繁体：滴滴-月限額…高德-月限额 - 英文：Amap - Monthly Limit - 日文：Amap - 月額上限 - 繁体：高德-月限額…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…【新建规则】侧拉框 - 分配字段 - 下拉增加：<b>滴滴-月限额、高德-月限额</b>…滴滴-月限额 - 英文：DiDi - Monthly Limit - 日文：DiDi - 月額上限 - 繁体：滴滴-月限額…高德-月限额 - 英文：Amap - Monthly Limit - 日文：Amap - 月額上限 - 繁体：高德-月限額…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=647, parentId=641, description=数字输入与校验（新建编辑分配规则）, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=648, parentId=647, description=滴滴-月限额和高德-月限额字段仅能输入整数+小数不超过15位, remarks=<b>前提：</b>正常新建/编辑分配规则。<br/><b>步骤：</b>对输入框边界位数进行尝试。<br/><b>预期：</b>超过15位报错“整数加小数位最多不超过15位”，等于或小于15位可保存。<br/><b>需求片段：</b>…<b>字段值为：数字输入框；按如下校验：整数+小数位数不超过15位</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…字段值为：数字输入框；按如下校验：<b>整数+小数位数不超过15位</b>…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[]), MindMapNodeDto(id=649, parentId=647, description=滴滴/高德月限额数字输入框允许清空已录入值, remarks=<b>前提：</b>有非空字段值。<br/><b>步骤：</b>编辑时将其清空并保存。<br/><b>预期：</b>保存成功，数字框可清空。数据库或接口查询该字段为null/空。<br/><b>需求片段：</b>…<b>【字段值】允许清空</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…【字段值】<b>允许清空</b>…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=650, parentId=641, description=操作审计记录, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=651, parentId=650, description=滴滴-月限额和高德-月限额勾选/取消勾选、规则新建/编辑均需被记录审计, remarks=<b>前提：</b>开启日志。<br/><b>步骤：</b>勾选、取消勾选、新建、编辑分配规则，并查审计日志。<br/><b>预期：</b>上述所有操作在审计日志中有详实记录，包括操作类型及字段。<br/><b>需求片段：</b>…<b>操作审计：- 『滴滴-月限额』、『滴滴-月限额』勾选、取消勾选操作 - 『滴滴-月限额』、『滴滴-月限额』的新建、编辑分配规则操作</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…操作审计：- 『滴滴-月限额』、『<b>滴滴-月限额』勾选、取消勾选操作-『滴滴-月限额』、『滴滴-月限额』的新建、编辑分配规则操作</b>…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=652, parentId=641, description=员工信息导入/模板导入限制, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=653, parentId=652, description=导入员工数据时扩展字段total_quota或heliosspc_amap_monthquota有值时报错, remarks=<b>前提：</b>开启批量分配，勾选相关字段。<br/><b>步骤：</b>模板填写非空值并导入。<br/><b>预期：</b>导入失败，明确报错，文案需与需求一致。<br/><b>需求片段：</b>…<b>创建人员导入时，如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入；</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…导入时，开启了消费商信息批量分配的字段，都必须为空；- <b>创建人员导入时，如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入</b>；…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[]), MindMapNodeDto(id=654, parentId=652, description=扩展字段模板导入带值时校验, remarks=<b>前提：</b>扩展字段模板导入，带值。<br/><b>步骤：</b>提交有值字段进行导入。<br/><b>预期：</b>报错文案严格一致。<br/><b>需求片段：</b>…<b>员工菜单-内部员工tab-员工扩展字段模板-如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入；</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…员工菜单-内部员工tab-员工扩展字段模板- <b>如果扩展字段total_quota或heliosspc_amap_monthquota有值，则报错：消费商信息批量分配勾选了滴滴-月限额，控件编码为total_quota的字段不允许导入</b>；…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=655, parentId=641, description=前端界面修改限制（字段禁用/灰显）, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=656, parentId=655, description=员工菜单扩展字段禁用（灰显）, remarks=<b>前提：</b>对应字段生效。<br/><b>步骤：</b>尝试在页面编辑，字段无法修改。<br/><b>预期：</b>两个扩展字段均灰显不可编辑。<br/><b>需求片段：</b>…<b>界面不允许修改，对应字段灰显：- 员工菜单-内部员工tab/外部员工tab-扩展字段total_quota或heliosspc_amap_monthquota</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…界面不允许修改，对应字段灰显：- 员工菜单-内部员工tab/外部员工tab-扩展字段total_quota或heliosspc_amap_monthquota…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[]), MindMapNodeDto(id=657, parentId=655, description=我的外部员工-申请单/单据选人控件字段禁用, remarks=<b>前提：</b>服务端及移动端界面。<br/><b>步骤：</b>查找字段，并尝试修改。<br/><b>预期：</b>全部禁用，不允许编辑。<br/><b>需求片段：</b>…<b>界面不允许修改，对应字段灰显…- 我的外部员工菜单-外部员工申请单-扩展字段total_quota或heliosspc_amap_monthquota…- 移动端业务单据选人控件创建外部员工-扩展字段</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…界面不允许修改，对应字段灰显…- 我的外部员工菜单-外部员工申请单-扩展字段total_quota或heliosspc_amap_monthquota…- 移动端业务单据选人控件创建外部员工-扩展字段…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=658, parentId=641, description=OpenAPI接口操作限制, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=659, parentId=658, description=OpenAPI接口不允许创建/更新扩展字段滴滴-月限额或高德-月限额, remarks=<b>前提：</b>开发者能使用OpenAPI。
+<b>步骤：</b>新建/更新请求都包含这两个扩展字段。
+<b>预期：</b>均返回错误，且错误信息准确。
+<b>需求片段：</b>…<b>OpenAPI不允许创建和更新扩展字段total_quota或heliosspc_amap_monthquota- 内部员工和外部员工的创建员工、更新员工</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…OpenAPI不允许创建和更新扩展字段total_quota或heliosspc_amap_monthquota- <b>内部员工和外部员工的创建员工、更新员工</b>…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])]), MindMapNodeDto(id=660, parentId=641, description=迁移中心配置及比对逻辑, remarks=null, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=null, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[MindMapNodeDto(id=661, parentId=660, description=迁移中心新加配置及比对滴滴-月限额、高德-月限额, remarks=<b>前提：</b>有需要比对的新老配置。<br/><b>步骤：</b>同步及比对迁移，查看两字段及勾选项差异和规则比对。<br/><b>预期：</b>可见比对项且逻辑正确。<br/><b>需求片段：</b>…<b>迁移中心-比对-新加的配置：滴滴-月限额、高德-月限额的勾选项和对应的规则比对</b>…, requirementId=inf-1129983, backendDeveloper=null, frontendDeveloper=null, tester=null, requirementReference=…迁移中心-比对- <b>新加的配置：滴滴-月限额、高德-月限额的勾选项和对应的规则比对</b>…, status=PENDING_TEST, isExpanded=true, hasStrikethrough=false, children=[])])])
+2025-06-24 11:11:48.621 [http-nio-16888-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-06-24 11:11:48.623 [http-nio-16888-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [MindMapNodeDto(id=641, parentId=null, description=inf-1129983 【王宇】【前端/后端】附件格式支持jfif, remarks=null, r (truncated)...]
+2025-06-24 11:11:48.632 [http-nio-16888-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Completed 201 CREATED

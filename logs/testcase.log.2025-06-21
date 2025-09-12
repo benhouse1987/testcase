@@ -1,0 +1,48 @@
+2025-06-21 00:09:32.574 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-06-21 00:09:32.575 [main] INFO  c.example.mindmap.MindmapApplication - Starting MindmapApplication using Java 1.8.0_341 on DESKTOP-DB1566L with PID 38832 (H:\IdeaProjects\testcase\mindmap\target\classes started by benmars in H:\IdeaProjects\testcase)
+2025-06-21 00:09:32.576 [main] DEBUG c.example.mindmap.MindmapApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+2025-06-21 00:09:32.576 [main] INFO  c.example.mindmap.MindmapApplication - The following 1 profile is active: "dev"
+2025-06-21 00:09:32.957 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 16888 (http)
+2025-06-21 00:09:32.970 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-16888"]
+2025-06-21 00:09:32.970 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-21 00:09:32.970 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-06-21 00:09:33.020 [main] INFO  o.a.c.c.C.[.[localhost].[/mindmap] - Initializing Spring embedded WebApplicationContext
+2025-06-21 00:09:33.020 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 426 ms
+2025-06-21 00:09:33.180 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-21 00:09:33.304 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-21 00:09:33.563 [main] INFO  liquibase.lockservice - Successfully acquired change log lock
+2025-06-21 00:09:33.761 [main] INFO  liquibase.changelog - Reading from testCase.DATABASECHANGELOG
+2025-06-21 00:09:33.957 [main] INFO  liquibase.lockservice - Successfully released change log lock
+2025-06-21 00:09:34.232 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-06-21 00:09:34.257 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 15 mappings in 'requestMappingHandlerMapping'
+2025-06-21 00:09:34.265 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-06-21 00:09:34.268 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-06-21 00:09:34.297 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-16888"]
+2025-06-21 00:09:34.301 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 16888 (http) with context path '/mindmap'
+2025-06-21 00:09:34.305 [main] INFO  c.example.mindmap.MindmapApplication - Started MindmapApplication in 1.875 seconds (JVM running for 2.213)
+2025-06-21 00:09:44.032 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-21 00:09:44.035 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-06-21 00:09:45.153 [main] INFO  c.example.mindmap.MindmapApplication - Starting MindmapApplication using Java 1.8.0_341 on DESKTOP-DB1566L with PID 14640 (H:\IdeaProjects\testcase\mindmap\target\classes started by benmars in H:\IdeaProjects\testcase)
+2025-06-21 00:09:45.154 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-06-21 00:09:45.154 [main] DEBUG c.example.mindmap.MindmapApplication - Running with Spring Boot v2.7.5, Spring v5.3.23
+2025-06-21 00:09:45.154 [main] INFO  c.example.mindmap.MindmapApplication - The following 1 profile is active: "dev"
+2025-06-21 00:09:45.626 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 16888 (http)
+2025-06-21 00:09:45.631 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-16888"]
+2025-06-21 00:09:45.632 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-21 00:09:45.632 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-06-21 00:09:45.690 [main] INFO  o.a.c.c.C.[.[localhost].[/mindmap] - Initializing Spring embedded WebApplicationContext
+2025-06-21 00:09:45.690 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 506 ms
+2025-06-21 00:09:45.873 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-21 00:09:46.017 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-21 00:09:46.341 [main] INFO  liquibase.lockservice - Successfully acquired change log lock
+2025-06-21 00:09:46.562 [main] INFO  liquibase.changelog - Reading from testCase.DATABASECHANGELOG
+2025-06-21 00:09:46.808 [main] INFO  liquibase.lockservice - Successfully released change log lock
+2025-06-21 00:09:47.081 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-06-21 00:09:47.109 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 15 mappings in 'requestMappingHandlerMapping'
+2025-06-21 00:09:47.117 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-06-21 00:09:47.120 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-06-21 00:09:47.153 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-16888"]
+2025-06-21 00:09:47.158 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 16888 (http) with context path '/mindmap'
+2025-06-21 00:09:47.162 [main] INFO  c.example.mindmap.MindmapApplication - Started MindmapApplication in 2.193 seconds (JVM running for 2.477)
+2025-06-21 00:16:04.895 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-06-21 00:16:04.897 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
