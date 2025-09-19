@@ -276,6 +276,10 @@ public class MindMapController {
         String doc = ThirdPartyAPITool.getDocContent(docToken);
 
         log.info("获取到了需求原文 {} {}", title, doc);
+        //尝试去掉背景等描述
+        if(doc.contains("功能逻辑")){
+            doc = doc.substring(doc.indexOf("功能逻辑"),doc.length()-1);
+        }
         testCaseRequestDTO.setOriginalRequirementText(doc);
         MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(testCaseRequestDTO);
 

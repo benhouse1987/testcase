@@ -331,9 +331,28 @@ public class MindMapServiceImpl implements MindMapService {
             throw new InvalidOperationException("Batch creation DTO cannot be null.");
         }
 
+        // 如果第一层（根节点）有id，先删除该id对应的整棵节点树
+        if (batchCreateNodeDto.getId() != null) {
+            MindMapNode existingNode = mindMapNodeMapper.selectById(batchCreateNodeDto.getId());
+            if (existingNode != null) {
+                deleteNodeAndChildren(batchCreateNodeDto.getId());
+            }
+        }
+
         // Convert the root DTO to an entity and save it
         MindMapNode rootNodeEntity = convertBatchDtoToEntity(batchCreateNodeDto, null); // null for parentId of root
-        mindMapNodeMapper.insert(rootNodeEntity); // MyBatis Plus will set the ID on rootNodeEntity after insert
+        if (rootNodeEntity.getId() != null) {
+            // 检查节点是否存在，如果存在则更新，否则插入
+            MindMapNode existingNode = mindMapNodeMapper.selectById(rootNodeEntity.getId());
+            if (existingNode != null) {
+                mindMapNodeMapper.updateById(rootNodeEntity);
+            } else {
+                mindMapNodeMapper.insert(rootNodeEntity);
+            }
+        } else {
+            // 如果没有提供id，使用普通insert让数据库自动生成id
+            mindMapNodeMapper.insert(rootNodeEntity);
+        }
 
         // Recursively create children
         if (batchCreateNodeDto.getChildren() != null && !batchCreateNodeDto.getChildren().isEmpty()) {
@@ -346,6 +365,10 @@ public class MindMapServiceImpl implements MindMapService {
 
     private MindMapNode convertBatchDtoToEntity(BatchCreateNodeDto dto, Long parentId) {
         MindMapNode entity = new MindMapNode();
+        // 如果DTO中提供了id，则使用指定的id
+        if (dto.getId() != null) {
+            entity.setId(dto.getId());
+        }
         // Manually map fields from DTO to ensure all desired fields are set
         entity.setDescription(dto.getDescription());
         entity.setRemarks(dto.getRemarks());
@@ -363,7 +386,18 @@ public class MindMapServiceImpl implements MindMapService {
     private void createChildrenRecursive(List<BatchCreateNodeDto> childDtos, Long parentId) {
         for (BatchCreateNodeDto childDto : childDtos) {
             MindMapNode childNodeEntity = convertBatchDtoToEntity(childDto, parentId);
-            mindMapNodeMapper.insert(childNodeEntity); // ID will be set on childNodeEntity
+            if (childNodeEntity.getId() != null) {
+                // 检查节点是否存在，如果存在则更新，否则插入
+                MindMapNode existingChildNode = mindMapNodeMapper.selectById(childNodeEntity.getId());
+                if (existingChildNode != null) {
+                    mindMapNodeMapper.updateById(childNodeEntity);
+                } else {
+                    mindMapNodeMapper.insert(childNodeEntity);
+                }
+            } else {
+                // 如果没有提供id，使用普通insert让数据库自动生成id
+                mindMapNodeMapper.insert(childNodeEntity);
+            }
 
             if (childDto.getChildren() != null && !childDto.getChildren().isEmpty()) {
                 createChildrenRecursive(childDto.getChildren(), childNodeEntity.getId());
@@ -423,7 +457,7 @@ public class MindMapServiceImpl implements MindMapService {
                 "如果需求新增了配置项，需要测试 各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例";
 
         GPTTestCaseStructureDto gptResponse = openAIService.generateTestCases(
-                requirementInputDto.getOriginalRequirementText(),
+                requirementInputDto.getRequirementTitle()+ requirementInputDto.getOriginalRequirementText(),
                 systemPrompt,
                 userPromptPrefix
         ).block(); // .block() makes it synchronous. Handle potential errors if Mono is empty or errors out.

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class BatchCreateNodeDto {
 
+    private Long id; // 可选字段，如果提供则使用指定的id创建节点
+
     @NotBlank(message = "Description cannot be blank")
     private String description;
 
