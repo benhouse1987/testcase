@@ -428,6 +428,7 @@ public class MindMapServiceImpl implements MindMapService {
         return nodeDto;
     }
 
+
     @Override
     @Transactional // This operation should be atomic
     public MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto) {
@@ -436,6 +437,21 @@ public class MindMapServiceImpl implements MindMapService {
         deleteWrapper.eq("requirement_id", requirementInputDto.getRequirementId());
         int deletedRows = mindMapNodeMapper.delete(deleteWrapper);
         logger.info("Deleted {} existing MindMapNode(s) for requirement ID: {}", deletedRows, requirementInputDto.getRequirementId());
+
+        // 第一步：调用大模型分析需求，获取功能点
+        logger.info("开始分析需求文档，提取功能点...");
+        String analyzedContent = openAIService.analyzeRequirementFunctionPoints(
+         "需求标题"+  requirementInputDto.getRequirementTitle()+"\n"+     requirementInputDto.getOriginalRequirementText()
+        ).block(); // 同步调用
+
+        if (analyzedContent == null || analyzedContent.trim().isEmpty()) {
+            throw new RuntimeException("Failed to analyze requirement or received empty analysis result from AI service.");
+        }
+
+        // 将分析结果存入 requirementInputDto 的 analyzedContent 属性
+        requirementInputDto.setAnalyzedContent(analyzedContent);
+        logger.info("需求分析完成，功能点内容长度: {} 字符", analyzedContent.length());
+        logger.debug("分析得到的功能点内容: {}", analyzedContent);
 
         String systemPrompt = "You are a senior testing expert. Please write test cases in Chinese for the requirements. " +
                               "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +
@@ -447,17 +463,19 @@ public class MindMapServiceImpl implements MindMapService {
                 "'remark'(html format string， 汇总 prerequisites，testSteps，expectedResults，quotedRequirementText这几个字段的内容，按照固定顺序 返回完整描述，内容不要引用其他字段。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
                 "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
 
-        String userPromptPrefix = "Based on the following requirement, generate detailed test cases as per the specified JSON structure. " +
-                                  "Divide the requirement into multiple distinct functional test object names. " +
+        String userPromptPrefix = "Based on the following analyzed functional points, generate detailed test cases as per the specified JSON structure. " +
+                                  "Divide the functional points into multiple distinct functional test object names. " +
                                   "For each functional point, write corresponding test cases. " +
                                   "Provide as many diverse test cases as possible without repetition of the same validation type. " +
-                                  "The 'quotedRequirementText' should be extracted carefully from the original requirement text provided below, " +
-                                  "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,original requirement text 使用html的加粗格式." +
+                                  "The 'quotedRequirementText' should be extracted carefully from the analyzed content provided below, " +
+                                  "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,analyzed content 使用html的加粗格式." +
                 "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;" +
                 "如果需求新增了配置项，需要测试 各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例";
 
+        // 第二步：使用分析后的功能点内容生成测试用例
+        logger.info("开始基于功能点分析结果生成测试用例...");
         GPTTestCaseStructureDto gptResponse = openAIService.generateTestCases(
-                requirementInputDto.getRequirementTitle()+ requirementInputDto.getOriginalRequirementText(),
+                requirementInputDto.getRequirementTitle() + " " + requirementInputDto.getAnalyzedContent(),
                 systemPrompt,
                 userPromptPrefix
         ).block(); // .block() makes it synchronous. Handle potential errors if Mono is empty or errors out.
@@ -465,6 +483,12 @@ public class MindMapServiceImpl implements MindMapService {
         if (gptResponse == null || gptResponse.getFunctionalPoints() == null || gptResponse.getFunctionalPoints().isEmpty()) {
             throw new RuntimeException("Failed to generate test cases or received empty response from AI service.");
         }
+
+        logger.info("测试用例生成完成，共生成 {} 个功能点", gptResponse.getFunctionalPoints().size());
+        int totalTestCases = gptResponse.getFunctionalPoints().stream()
+                .mapToInt(fp -> fp.getTestScenarios() != null ? fp.getTestScenarios().size() : 0)
+                .sum();
+        logger.info("总共生成 {} 个测试用例", totalTestCases);
 
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
         rootBatchDto.setDescription( requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
@@ -500,7 +524,11 @@ public class MindMapServiceImpl implements MindMapService {
         }
         rootBatchDto.setChildren(firstLevelChildren);
 
-        return this.createNodesBatch(rootBatchDto);
+        MindMapNodeDto result = this.createNodesBatch(rootBatchDto);
+        logger.info("思维导图节点创建完成，根节点ID: {}, 需求ID: {}", 
+                result != null ? result.getId() : "null", requirementInputDto.getRequirementId());
+        
+        return result;
     }
 
     @Override

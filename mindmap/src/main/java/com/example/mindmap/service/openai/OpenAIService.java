@@ -63,7 +63,7 @@ public class OpenAIService {
         Map<String, String> tempMap = new HashMap<>();
         tempMap.put("type", "json_object");
         Map<String, String> responseFormatMap = Collections.unmodifiableMap(tempMap);
-        OpenAIChatRequestDto requestDto = new OpenAIChatRequestDto("gpt-4o-mini", messages, responseFormatMap);
+        OpenAIChatRequestDto requestDto = new OpenAIChatRequestDto("o1-preview", messages, responseFormatMap);
 
         return this.webClient.post()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
@@ -94,6 +94,48 @@ public class OpenAIService {
                 .doOnError(error -> {
                     System.err.println("OpenAI API call or processing failed: " + error.getMessage());
                     // Consider more specific error handling based on WebClientResponseException
+                });
+    }
+
+    /**
+     * 分析需求文本，提取功能点
+     * @param requirementText 原始需求文本
+     * @return 分析后的功能点内容
+     */
+    public Mono<String> analyzeRequirementFunctionPoints(String requirementText) {
+        if (apiKey == null || apiKey.isEmpty() || "YOUR_OPENAI_API_KEY_PLACEHOLDER".equals(apiKey)) {
+            return Mono.error(new IllegalStateException("OpenAI API key is not configured or is still a placeholder."));
+        }
+
+        String systemPrompt = "你是一个资深的需求分析专家。请分析需求文档，整理需求为开发的功能点。";
+        String userPrompt = requirementText + " 整理需求为开发的功能点，不要分场景，不要分类，每一条功能点都是可以直接对照开发的，充分考虑需求标题，分析当前功能点是否是已有功能并标记，同时返回引用的需求原文，不要想象和推测需求文档不存在的内容";
+
+        List<OpenAIMessageDto> messages = new ArrayList<>();
+        messages.add(new OpenAIMessageDto("system", systemPrompt));
+        messages.add(new OpenAIMessageDto("user", userPrompt));
+
+        OpenAIChatRequestDto requestDto = new OpenAIChatRequestDto("o1-preview", messages, null);
+
+        return this.webClient.post()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
+                .bodyValue(requestDto)
+                .retrieve()
+                .bodyToMono(OpenAIChatResponseDto.class)
+                .doOnError(error -> logger.warn("OpenAI API call for requirement analysis failed, attempting retry. Error: {}", error.getMessage()))
+                .retry(1)
+                .flatMap(response -> {
+                    if (response != null && response.getChoices() != null && !response.getChoices().isEmpty()) {
+                        OpenAIChatResponseDto.Choice firstChoice = response.getChoices().get(0);
+                        if (firstChoice.getMessage() != null && firstChoice.getMessage().getContent() != null) {
+                            String analyzedContent = firstChoice.getMessage().getContent();
+                            logger.info("Requirement analysis response: {}", analyzedContent);
+                            return Mono.just(analyzedContent);
+                        }
+                    }
+                    return Mono.error(new RuntimeException("Invalid or empty response from OpenAI for requirement analysis."));
+                })
+                .doOnError(error -> {
+                    logger.error("OpenAI API call for requirement analysis failed: {}", error.getMessage());
                 });
     }
 }

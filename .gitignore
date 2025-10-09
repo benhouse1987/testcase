@@ -1,3 +1,9 @@
 # Default ignored files
 mindmap/target/
 .idea/
+
+# IDE settings
+.vscode/
+
+# Log files
+logs/

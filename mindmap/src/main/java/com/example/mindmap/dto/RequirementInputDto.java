@@ -15,6 +15,8 @@ public class RequirementInputDto {
 
     private String docToken;
 
+    private String analyzedContent; // 存储大模型分析后的功能点内容
+
     // Constructors, Getters, and Setters (or use Lombok @Data)
     public RequirementInputDto() {}
 
@@ -37,5 +39,13 @@ public class RequirementInputDto {
 
     public void setDocToken(String docToken) {
         this.docToken = docToken;
+    }
+
+    public String getAnalyzedContent() {
+        return analyzedContent;
+    }
+
+    public void setAnalyzedContent(String analyzedContent) {
+        this.analyzedContent = analyzedContent;
     }
 }
