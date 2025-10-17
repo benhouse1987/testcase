@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,12 +23,16 @@ public class MindMapNodeDto {
     private NodeStatus status;
     private Boolean isExpanded; // Added
     private Boolean hasStrikethrough; // Added
+    // 新增：创建时间与 AI 标记
+    private LocalDateTime createdAt;
+    private Integer isAiGenerated;
     private List<MindMapNodeDto> children = new ArrayList<>();
 
     // Consider a constructor to map from MindMapNode entity if needed, or use a mapping library
     public MindMapNodeDto(Long id, Long parentId, String description, String remarks, String requirementId,
                           String backendDeveloper, String frontendDeveloper, String tester,
-                          String requirementReference, NodeStatus status, Boolean isExpanded, Boolean hasStrikethrough) { // Updated constructor
+                          String requirementReference, NodeStatus status, Boolean isExpanded, Boolean hasStrikethrough,
+                          LocalDateTime createdAt, Integer isAiGenerated) { // Updated constructor
         this.id = id;
         this.parentId = parentId;
         this.description = description;
@@ -40,5 +45,7 @@ public class MindMapNodeDto {
         this.status = status;
         this.isExpanded = isExpanded; // Added
         this.hasStrikethrough = hasStrikethrough; // Added
+        this.createdAt = createdAt; // Added
+        this.isAiGenerated = isAiGenerated; // Added
     }
 }

@@ -28,6 +28,9 @@ public class BatchCreateNodeDto {
 
     private NodeStatus status = NodeStatus.PENDING_TEST; // Default status
 
+    // 新增：是否 AI 生成标记，AI 创建时传入 1，默认 null
+    private Integer isAiGenerated;
+
     private List<BatchCreateNodeDto> children = new ArrayList<>();
 
     // Constructor to initialize children - though @Data and @NoArgsConstructor might be enough,

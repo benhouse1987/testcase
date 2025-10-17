@@ -31,6 +31,31 @@
     ```
     应用将会启动，Liquibase 将应用数据库结构和示例数据。
 
+## 数据库字段迁移
+
+为满足“创建时间”和“是否 AI 生成”需求，请在现有库中执行以下 SQL（MySQL）：
+
+```sql
+ALTER TABLE `mind_map_node`
+  ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+  ADD COLUMN `is_ai_generated` TINYINT(1) NULL DEFAULT NULL COMMENT 'AI生成标记：1 为 AI 生成';
+```
+
+说明：
+- `created_at` 由 MyBatis-Plus 的 `MetaObjectHandler` 在插入时自动填充；并且上述默认值也会保证历史数据在新增列时有值。
+- `is_ai_generated` 默认为 `NULL`；AI 自动创建节点时服务层会设置为 `1`。
+
+如果你使用 Liquibase，可以添加一个 changeset 示例：
+
+```xml
+<changeSet id="add-created-at-and-ai-flag" author="yourname">
+    <addColumn tableName="mind_map_node">
+        <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP" remarks="记录创建时间" />
+        <column name="is_ai_generated" type="TINYINT(1)" remarks="AI生成标记：1 为 AI 生成"/>
+    </addColumn>
+</changeSet>
+```
+
 ## API 文档
 
 所有 API 端点都以 `/api/mindmap` 为前缀。

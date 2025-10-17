@@ -380,6 +380,8 @@ public class MindMapServiceImpl implements MindMapService {
         entity.setStatus(dto.getStatus() == null ? com.example.mindmap.entity.NodeStatus.PENDING_TEST : dto.getStatus());
         // isExpanded and hasStrikethrough are not in BatchCreateNodeDto, will take entity defaults
         entity.setParentId(parentId);
+        // 新增映射：AI 创建标记
+        entity.setIsAiGenerated(dto.getIsAiGenerated());
         return entity;
     }
 
@@ -496,6 +498,8 @@ public class MindMapServiceImpl implements MindMapService {
         rootBatchDto.setRemarks(requirementInputDto.getDocToken());
         // Set other root node properties if necessary, e.g., status
         rootBatchDto.setStatus(NodeStatus.PENDING_TEST); // Default status
+        // 新增：AI 创建标记
+        rootBatchDto.setIsAiGenerated(1);
 
 
         List<BatchCreateNodeDto> firstLevelChildren = new ArrayList<>();
@@ -504,6 +508,8 @@ public class MindMapServiceImpl implements MindMapService {
             fpNodeDto.setDescription(fpDto.getFunctionalPointName());
             fpNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
             fpNodeDto.setStatus(NodeStatus.PENDING_TEST); // Default status
+            // 新增：AI 创建标记
+            fpNodeDto.setIsAiGenerated(1);
 
 
             List<BatchCreateNodeDto> secondLevelChildren = new ArrayList<>();
@@ -516,6 +522,8 @@ public class MindMapServiceImpl implements MindMapService {
                     scenarioNodeDto.setRequirementReference(scenarioDto.getQuotedRequirementText());
                     scenarioNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
                     scenarioNodeDto.setStatus(NodeStatus.PENDING_TEST); // Default status
+                    // 新增：AI 创建标记
+                    scenarioNodeDto.setIsAiGenerated(1);
                     secondLevelChildren.add(scenarioNodeDto);
                 }
             }
