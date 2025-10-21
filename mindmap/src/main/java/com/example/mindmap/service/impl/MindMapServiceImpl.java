@@ -94,6 +94,13 @@ public class MindMapServiceImpl implements MindMapService {
                 }
             }
         }
+        
+        // 处理多根节点的情况
+        if (tree.size() > 1) {
+            logger.info("发现多个根节点 ({}个) for requirement ID: {}", tree.size(), requirementId);
+            tree = handleMultipleRootNodes(tree, requirementId);
+        }
+        
         return tree;
     }
 
@@ -141,6 +148,20 @@ public class MindMapServiceImpl implements MindMapService {
         }
 
         mindMapNodeMapper.deleteById(nodeId); // Delete the node
+    }
+
+    @Override
+    @Transactional
+    public void deleteNodesByRequirementId(String requirementId) {
+        if (!StringUtils.hasText(requirementId)) {
+            logger.warn("RequirementId is empty or null, skipping deletion");
+            return;
+        }
+        
+        QueryWrapper<MindMapNode> deleteWrapper = new QueryWrapper<>();
+        deleteWrapper.eq("requirement_id", requirementId);
+        int deletedRows = mindMapNodeMapper.delete(deleteWrapper);
+        logger.info("Deleted {} existing MindMapNode(s) for requirement ID: {}", deletedRows, requirementId);
     }
 
     @Override
@@ -434,12 +455,6 @@ public class MindMapServiceImpl implements MindMapService {
     @Override
     @Transactional // This operation should be atomic
     public MindMapNodeDto generateTestCasesFromRequirement(RequirementInputDto requirementInputDto) {
-        // Delete existing nodes for this requirementId before generating new ones
-        QueryWrapper<MindMapNode> deleteWrapper = new QueryWrapper<>();
-        deleteWrapper.eq("requirement_id", requirementInputDto.getRequirementId());
-        int deletedRows = mindMapNodeMapper.delete(deleteWrapper);
-        logger.info("Deleted {} existing MindMapNode(s) for requirement ID: {}", deletedRows, requirementInputDto.getRequirementId());
-
         // 第一步：调用大模型分析需求，获取功能点
         logger.info("开始分析需求文档，提取功能点...");
         String analyzedContent = openAIService.analyzeRequirementFunctionPoints(
@@ -721,5 +736,51 @@ public class MindMapServiceImpl implements MindMapService {
             newDto.setChildren(copiedChildrenDtos);
         }
         return newDto;
+    }
+
+    /**
+     * 处理多根节点的情况：
+     * 1. 检查是否有根节点没有子节点
+     * 2. 如果有，删除这些无子节点的根节点
+     * 3. 返回有子节点的根节点
+     */
+    @Transactional
+    private List<MindMapNodeDto> handleMultipleRootNodes(List<MindMapNodeDto> rootNodes, String requirementId) {
+        List<MindMapNodeDto> rootsWithChildren = new ArrayList<>();
+        List<MindMapNodeDto> rootsWithoutChildren = new ArrayList<>();
+        
+        // 分类根节点：有子节点的和没有子节点的
+        for (MindMapNodeDto rootNode : rootNodes) {
+            if (rootNode.getChildren() != null && !rootNode.getChildren().isEmpty()) {
+                rootsWithChildren.add(rootNode);
+            } else {
+                rootsWithoutChildren.add(rootNode);
+            }
+        }
+        
+        // 如果有无子节点的根节点，删除它们
+        if (!rootsWithoutChildren.isEmpty()) {
+            logger.info("发现 {} 个无子节点的根节点，准备删除 for requirement ID: {}", 
+                       rootsWithoutChildren.size(), requirementId);
+            
+            for (MindMapNodeDto rootToDelete : rootsWithoutChildren) {
+                try {
+                    mindMapNodeMapper.deleteById(rootToDelete.getId());
+                    logger.info("已删除无子节点的根节点 ID: {} for requirement ID: {}", 
+                               rootToDelete.getId(), requirementId);
+                } catch (Exception e) {
+                    logger.error("删除根节点失败 ID: {} for requirement ID: {}, 错误: {}", 
+                                rootToDelete.getId(), requirementId, e.getMessage());
+                }
+            }
+        }
+        
+        // 如果有多个有子节点的根节点，记录警告但返回所有
+        if (rootsWithChildren.size() > 1) {
+            logger.warn("仍然存在 {} 个有子节点的根节点 for requirement ID: {}", 
+                       rootsWithChildren.size(), requirementId);
+        }
+        
+        return rootsWithChildren;
     }
 }

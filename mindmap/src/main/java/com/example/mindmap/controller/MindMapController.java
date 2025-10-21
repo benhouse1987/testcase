@@ -268,6 +268,11 @@ public class MindMapController {
             log.error("URL解码失败: {}", e.getMessage());
         }
         log.info("重新生成脑图 {}", title);
+        
+        // 先按照Rdcnumber删除表内数据（独立事务）
+        log.info("开始删除需求ID为 {} 的现有数据", rdcNumber);
+        mindMapService.deleteNodesByRequirementId(rdcNumber);
+        
         RequirementInputDto testCaseRequestDTO = new RequirementInputDto();
         testCaseRequestDTO.setRequirementId(rdcNumber);
         testCaseRequestDTO.setRequirementTitle(title);

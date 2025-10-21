@@ -16,6 +16,7 @@ public interface MindMapService {
     // ... existing methods ...
     void deleteNodeAndChildren(Long nodeId);
     void deleteNodeKeepChildren(Long nodeId);
+    void deleteNodesByRequirementId(String requirementId);
 
     // ... existing methods ...
     MindMapNode updateNodeDescription(Long nodeId, String description);
