@@ -179,27 +179,8 @@ public class MindMapController {
         logger.debug("Full request payload: {}", requirementInputDto); // Logs the full DTO, requires toString() in DTO
                                                                        // or use ObjectMapper
 
-        try {
-            MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(requirementInputDto);
-            logger.info(
-                    "Successfully generated and saved test cases for requirement ID: {}. Returning root node ID: {}",
-                    requirementInputDto.getRequirementId(), mindMapRootNode != null ? mindMapRootNode.getId() : "null");
-            logger.debug("Full response payload: {}", mindMapRootNode); // Logs the full DTO
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(mindMapRootNode);
-        } catch (IllegalStateException e) {
-            logger.error("Error generating test cases for requirement ID: {}. OpenAI API key issue: {}",
-                    requirementInputDto.getRequirementId(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simplified error response
-        } catch (RuntimeException e) {
-            logger.error("Error generating test cases for requirement ID: {}. RuntimeException: {}",
-                    requirementInputDto.getRequirementId(), e.getMessage(), e); // Log stack trace
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Simplified error response
-        } catch (Exception e) { // Catch any other unexpected errors
-            logger.error("Unexpected error generating test cases for requirement ID: {}: {}",
-                    requirementInputDto.getRequirementId(), e.getMessage(), e); // Log stack trace
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        genTestCase(requirementInputDto.getDocToken(),requirementInputDto.getRequirementId(),requirementInputDto.getRequirementTitle());
+        return ResponseEntity.status(HttpStatus.CREATED).build();       
     }
 
     @PutMapping("/nodes/{nodeToMoveId}/move-to/{newParentNodeId}")
