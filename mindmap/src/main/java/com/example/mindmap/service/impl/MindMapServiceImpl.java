@@ -470,14 +470,13 @@ public class MindMapServiceImpl implements MindMapService {
         logger.info("需求分析完成，功能点内容长度: {} 字符", analyzedContent.length());
         logger.debug("分析得到的功能点内容: {}", analyzedContent);
 
-        String systemPrompt = "You are a senior testing expert. Please write test cases in Chinese for the requirements. " +
+        String systemPrompt = "You are a senior testing expert. Please 按照功能点顺序 write test cases in Chinese for the requirements. " +
                               "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +
                               "which is an array. Each element in 'functionalPoints' should represent a distinct functional point and have " +
-                              "'functionalPointName' (string) and 'testScenarios' (array) keys. Each element in 'testScenarios' should have " +
-                              "'testCaseId' (string, e.g., 0010,0020,0030), 'testCaseGroup' (string, e.g., Smoke Test), " +
-                "'testTarget' (string), 描述测试用例的测试目标, " +
+                              "'functionalPointName' (string 不要包含编号) and 'testScenarios' (array) keys, 'testCaseGroup' (string, e.g., Smoke Test), " +
+                "'testTarget' (string), 描述测试用例的测试目标, 不要包含 验证，准确性等无用词汇，直接描述测试点，需要包含测试动作和明确的测试期望结果" +
                 "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的检查点，包括报错文案，具体的数据值等，需要具体描述每一个期望点的实际检查内容) keys. " +
-                "'remark'(html format string， 汇总 prerequisites，testSteps，expectedResults，quotedRequirementText这几个字段的内容，按照固定顺序 返回完整描述，内容不要引用其他字段。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
+                "'remark'(html format string， quotedRequirementText这个字段的内容。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
                 "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
 
         String userPromptPrefix = "Based on the following analyzed functional points, generate detailed test cases as per the specified JSON structure. " +
@@ -486,8 +485,8 @@ public class MindMapServiceImpl implements MindMapService {
                                   "Provide as many diverse test cases as possible without repetition of the same validation type. " +
                                   "The 'quotedRequirementText' should be extracted carefully from the analyzed content provided below, " +
                                   "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,analyzed content 使用html的加粗格式." +
-                "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;" +
-                "如果需求新增了配置项，需要测试 各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例";
+                "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;用例描述需要简洁，" +
+                "如果需求新增了配置项，需要测试配置项是否已经新增，测试各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例";
 
         // 第二步：使用分析后的功能点内容生成测试用例
         logger.info("开始基于功能点分析结果生成测试用例...");
@@ -518,9 +517,13 @@ public class MindMapServiceImpl implements MindMapService {
 
 
         List<BatchCreateNodeDto> firstLevelChildren = new ArrayList<>();
+        int testCaseId=0;
+        int functionId=0;
+
         for (FunctionalPointDto fpDto : gptResponse.getFunctionalPoints()) {
+            functionId++;
             BatchCreateNodeDto fpNodeDto = new BatchCreateNodeDto();
-            fpNodeDto.setDescription(fpDto.getFunctionalPointName());
+            fpNodeDto.setDescription(functionId*10+". "+ fpDto.getFunctionalPointName());
             fpNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
             fpNodeDto.setStatus(NodeStatus.PENDING_TEST); // Default status
             // 新增：AI 创建标记
@@ -530,15 +533,18 @@ public class MindMapServiceImpl implements MindMapService {
             List<BatchCreateNodeDto> secondLevelChildren = new ArrayList<>();
             if (fpDto.getTestScenarios() != null) {
                 for (ScenarioDto scenarioDto : fpDto.getTestScenarios()) {
+                    testCaseId++;
                     BatchCreateNodeDto scenarioNodeDto = new BatchCreateNodeDto();
                     
-                    scenarioNodeDto.setDescription(scenarioDto.getTestCaseId()+" "+ scenarioDto.getTestTarget());
-                    scenarioNodeDto.setRemarks(scenarioDto.getRemark());
+                    scenarioNodeDto.setDescription( testCaseId*10+". "+ scenarioDto.getTestTarget());
+                    // scenarioNodeDto.setRemarks(scenarioDto.getRemark());
                     scenarioNodeDto.setRequirementReference(scenarioDto.getQuotedRequirementText());
                     scenarioNodeDto.setRequirementId(requirementInputDto.getRequirementId()); // Inherit reqId
                     scenarioNodeDto.setStatus(NodeStatus.PENDING_TEST); // Default status
                     // 新增：AI 创建标记
                     scenarioNodeDto.setIsAiGenerated(1);
+                    
+                   
                     secondLevelChildren.add(scenarioNodeDto);
                 }
             }
