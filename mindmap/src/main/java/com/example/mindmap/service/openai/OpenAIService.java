@@ -108,7 +108,8 @@ public class OpenAIService {
         }
 
         String systemPrompt = "你是一个资深的需求分析专家。请分析需求文档，整理需求为开发的功能点。";
-        String userPrompt = requirementText + " 按照文档顺序，整理需求为开发的功能点，不要分场景，不要分类，每一条功能点都是可以直接对照开发的，充分考虑需求标题，分析当前功能点是否是已有功能并标记，同时返回引用的需求原文，不要想象和推测需求文档不存在的内容";
+        String userPrompt = requirementText + " 按照文档顺序，整理需求为开发的功能点，每一条功能点都是可以直接对照开发的，充分考虑需求标题，保留功能点对应的菜单界面，以及生效前提。"+
+        "分析当前功能点是否是已有功能并标记，同时返回引用的需求原文，不要想象和推测需求文档不存在的内容.";
 
         List<OpenAIMessageDto> messages = new ArrayList<>();
         messages.add(new OpenAIMessageDto("system", systemPrompt));

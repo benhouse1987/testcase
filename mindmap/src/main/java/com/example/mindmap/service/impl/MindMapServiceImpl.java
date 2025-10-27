@@ -473,20 +473,27 @@ public class MindMapServiceImpl implements MindMapService {
         String systemPrompt = "You are a senior testing expert. Please 按照功能点顺序 write test cases in Chinese for the requirements. " +
                               "Output the test cases in a structured JSON format. The root of the JSON should be an object with a single key 'functionalPoints', " +
                               "which is an array. Each element in 'functionalPoints' should represent a distinct functional point and have " +
-                              "'functionalPointName' (string 不要包含编号) and 'testScenarios' (array) keys, 'testCaseGroup' (string, e.g., Smoke Test), " +
-                "'testTarget' (string), 描述测试用例的测试目标, 不要包含 验证，准确性等无用词汇，直接描述测试点，需要包含测试动作和明确的测试期望结果" +
-                "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提), 'testSteps' (string 详细的测试步骤), and 'expectedResults' (string 详细的检查点，包括报错文案，具体的数据值等，需要具体描述每一个期望点的实际检查内容) keys. " +
-                "'remark'(html format string， quotedRequirementText这个字段的内容。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
-                "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
+                              "'functionalPointName' (string 不要包含编号) and 'testScenarios' (array) keys " +
+                "'testTarget' (string), 描述测试用例的测试目标, 不要包含 验证，准确性等无用词汇，直接描述测试点，需要包含测试动作和明确的测试期望结果。当功能点明确提及菜单范围时，testTarget中应包含测试菜单范围,明确列出每一个菜单,多个菜单下的相同功能点不要拆分成多个测试用例，放在一起。" +
+                "'quotedRequirementText' (string), 'prerequisites' (string，联系上下文描述完整的配置前提或者场景前提) keys.  "
+                +"json example    [{\r\n" + //
+                                        "      \"functionalPointName\": \"无可见线索时的处理\",\r\n" + //
+                                        "      \"testScenarios\": [\r\n" + //
+                                        "        {\r\n" + //
+                                        "          \"testTarget\": \"在审批、审核、发票袋审核等菜单下查看单据，如果当前用户无可见线索则不展示线索入口\",\r\n" + //
+                                        "        }]" ;
+                // +"'remark'(html format string， quotedRequirementText这个字段的内容。使用中文，html格式，注意换行，加粗各个标题，美观友好"+
+                // "Ensure 'quotedRequirementText' includes about 80 characters before and after the relevant part of the original text,可以包含多段， with ellipses for the rest.";
 
         String userPromptPrefix = "Based on the following analyzed functional points, generate detailed test cases as per the specified JSON structure. " +
                                   "Divide the functional points into multiple distinct functional test object names. " +
                                   "For each functional point, write corresponding test cases. " +
                                   "Provide as many diverse test cases as possible without repetition of the same validation type. " +
-                                  "The 'quotedRequirementText' should be extracted carefully from the analyzed content provided below, " +
-                                  "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,analyzed content 使用html的加粗格式." +
+                                //   "The 'quotedRequirementText' should be extracted carefully from the analyzed content provided below, " +
+                                //   "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,analyzed content 使用html的加粗格式." +
                 "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;用例描述需要简洁，" +
-                "如果需求新增了配置项，需要测试配置项是否已经新增，测试各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例";
+                "如果需求新增了配置项，需要测试配置项是否已经新增，测试各种情形下配置项的初始值逻辑,如果需求没有明显地新增配置项，则不要生成配置测试用例。"+
+                "为每一个功能点生成用例，不要遗漏";
 
         // 第二步：使用分析后的功能点内容生成测试用例
         logger.info("开始基于功能点分析结果生成测试用例...");
