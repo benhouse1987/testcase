@@ -33,17 +33,19 @@
 
 ## 数据库字段迁移
 
-为满足“创建时间”和“是否 AI 生成”需求，请在现有库中执行以下 SQL（MySQL）：
+为满足"创建时间"、"是否 AI 生成"和"CSS样式"需求，请在现有库中执行以下 SQL（MySQL）：
 
 ```sql
 ALTER TABLE `mind_map_node`
   ADD COLUMN `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  ADD COLUMN `is_ai_generated` TINYINT(1) NULL DEFAULT NULL COMMENT 'AI生成标记：1 为 AI 生成';
+  ADD COLUMN `is_ai_generated` TINYINT(1) NULL DEFAULT NULL COMMENT 'AI生成标记：1 为 AI 生成',
+  ADD COLUMN `css_style` VARCHAR(4000) NULL DEFAULT NULL COMMENT '节点CSS样式信息，用于存储节点的自定义样式';
 ```
 
 说明：
 - `created_at` 由 MyBatis-Plus 的 `MetaObjectHandler` 在插入时自动填充；并且上述默认值也会保证历史数据在新增列时有值。
 - `is_ai_generated` 默认为 `NULL`；AI 自动创建节点时服务层会设置为 `1`。
+- `css_style` 默认为 `NULL`；用于存储节点的CSS样式信息，最大长度4000字符。
 
 如果你使用 Liquibase，可以添加一个 changeset 示例：
 
@@ -52,6 +54,12 @@ ALTER TABLE `mind_map_node`
     <addColumn tableName="mind_map_node">
         <column name="created_at" type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP" remarks="记录创建时间" />
         <column name="is_ai_generated" type="TINYINT(1)" remarks="AI生成标记：1 为 AI 生成"/>
+    </addColumn>
+</changeSet>
+
+<changeSet id="add-css-style-field" author="yourname">
+    <addColumn tableName="mind_map_node">
+        <column name="css_style" type="VARCHAR(4000)" remarks="节点CSS样式信息，用于存储节点的自定义样式"/>
     </addColumn>
 </changeSet>
 ```
@@ -76,7 +84,8 @@ ALTER TABLE `mind_map_node`
         "frontendDeveloper": "dev_fe",
         "tester": "tester_x",
         "requirementReference": "需求文档链接",
-        "status": "PENDING_TEST" // 可选，默认为 PENDING_TEST
+        "status": "PENDING_TEST", // 可选，默认为 PENDING_TEST
+        "cssStyle": "color: red; font-weight: bold;" // 可选，节点的CSS样式信息
     }
     ```
 *   **cURL 示例**:
@@ -99,7 +108,8 @@ ALTER TABLE `mind_map_node`
         "frontendDeveloper": null,
         "tester": null,
         "requirementReference": null,
-        "status": "PENDING_TEST"
+        "status": "PENDING_TEST",
+        "cssStyle": null // CSS样式信息，可为null
         // 通过 DTO 创建新节点时，children 列表将为空，但此端点返回的是实体
     }
     ```
@@ -334,11 +344,13 @@ ALTER TABLE `mind_map_node`
         "frontendDeveloper": "dev_lead_fe",
         "tester": "qa_lead",
         "status": "PENDING_TEST",
+        "cssStyle": "background-color: #f0f0f0; border: 1px solid #ccc;", // 可选，节点的CSS样式信息
         "children": [
             {
                 "description": "Phase 1: Design",
                 "requirementId": "REQ-ALPHA-001", // 通常整个树使用相同的 reqId
                 "remarks": "Initial design documents",
+                "cssStyle": "color: blue;", // 可选，子节点也可以有CSS样式
                 "children": [
                     {
                         "description": "API Specification",
@@ -389,17 +401,38 @@ ALTER TABLE `mind_map_node`
         "frontendDeveloper": "dev_lead_fe",
         "tester": "qa_lead",
         "status": "PENDING_TEST",
+        "cssStyle": "background-color: #f0f0f0; border: 1px solid #ccc;", // CSS样式信息
         "children": [
             {
                 "id": 124,
                 "parentId": 123,
                 "description": "Phase 1: Design",
-                // ... 其他字段 ...
+                "cssStyle": "color: blue;", // 子节点的CSS样式信息
                 "children": [
-                    // ... 孙子节点 ...
+                    {
+                        "description": "API Specification",
+                        "requirementId": "REQ-ALPHA-001"
+                    },
+                    {
+                        "description": "Database Schema",
+                        "requirementId": "REQ-ALPHA-001"
+                    }
                 ]
             }
-            // ... 其他子节点 ...
+            {
+                "description": "Phase 2: Development",
+                "requirementId": "REQ-ALPHA-001",
+                "children": [
+                    {
+                        "description": "Backend Implementation",
+                        "requirementId": "REQ-ALPHA-001"
+                    },
+                    {
+                        "description": "Frontend Implementation",
+                        "requirementId": "REQ-ALPHA-001"
+                    }
+                ]
+            }
         ]
     }
     ```
@@ -553,6 +586,7 @@ ALTER TABLE `mind_map_node`
 *   `status` (Enum): 节点状态 (例如: `PENDING_TEST`, `TESTED`, `CANCELLED`)。
 *   `isExpanded` (Boolean): 节点是否展开 (true/false)。
 *   `hasStrikethrough` (Boolean): 节点内容是否显示删除线 (true/false)。
+*   `cssStyle` (String): 节点的CSS样式信息 (可选)。
 
 **请求示例:**
 
@@ -561,7 +595,8 @@ ALTER TABLE `mind_map_node`
   "description": "更新后的节点描述",
   "status": "TESTED",
   "isExpanded": false,
-  "hasStrikethrough": true
+  "hasStrikethrough": true,
+  "cssStyle": "background-color: #e8f5e8; border-left: 3px solid #4caf50;"
 }
 ```
 
@@ -573,4 +608,53 @@ ALTER TABLE `mind_map_node`
 
 *   `404 Not Found`: 如果具有指定 `id` 的节点未找到。
 *   `400 Bad Request`: 如果请求体无效 (例如，字段类型不匹配)。
+
+---
+
+### PUT /api/mindmap/nodes/{nodeId}/css-style
+
+更新指定节点的CSS样式。
+
+**路径参数:**
+
+*   `nodeId` (Long): 必需，要更新CSS样式的节点ID。
+
+**请求体 (JSON):**
+
+```json
+{
+  "cssStyle": "background-color: #ffeb3b; color: #333; border: 2px solid #ffc107; border-radius: 5px;"
+}
 ```
+
+**请求字段说明:**
+
+*   `cssStyle` (String): 必需，要应用到节点的CSS样式字符串。
+
+**成功响应 (200 OK):**
+
+```json
+{
+  "message": "Node CSS style updated successfully"
+}
+```
+
+**失败响应:**
+
+*   `404 Not Found`: 如果具有指定 `nodeId` 的节点未找到。
+*   `400 Bad Request`: 如果节点ID为null或请求体格式无效。
+*   `500 Internal Server Error`: 如果更新过程中发生服务器错误。
+
+**使用示例:**
+
+```bash
+curl -X PUT "http://localhost:8080/api/mindmap/nodes/123/css-style" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "cssStyle": "background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 8px;"
+     }'
+```
+
+**说明:**
+
+此API专门用于更新节点的CSS样式，提供了一个简洁的方式来修改节点的视觉外观，而无需更新节点的其他属性。CSS样式字符串将直接应用到前端的节点元素上。

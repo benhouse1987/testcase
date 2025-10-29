@@ -54,4 +54,7 @@ public class MindMapNode {
 
     // 新增：是否 AI 生成标记，AI 创建时传入 1，默认 null
     private Integer isAiGenerated;
+
+    // CSS样式字符串，用于存储节点的样式信息，最大长度4000字符
+    private String cssStyle;
 }

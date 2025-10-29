@@ -31,6 +31,9 @@ public class BatchCreateNodeDto {
     // 新增：是否 AI 生成标记，AI 创建时传入 1，默认 null
     private Integer isAiGenerated;
 
+    // CSS样式字符串，用于存储节点的样式信息
+    private String cssStyle;
+
     private List<BatchCreateNodeDto> children = new ArrayList<>();
 
     // Constructor to initialize children - though @Data and @NoArgsConstructor might be enough,

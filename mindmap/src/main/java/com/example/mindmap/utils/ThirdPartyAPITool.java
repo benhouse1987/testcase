@@ -59,4 +59,93 @@ public class ThirdPartyAPITool {
         }
     }
 
+    public static void sendMessage(String userId, String text, String idType) {
+        try {
+            // 构建client
+            Client client = Client.newBuilder(APP_ID, APP_SECRET).build();
+
+            // 创建请求对象
+            CreateMessageReq req = CreateMessageReq.newBuilder()
+                    .receiveIdType(idType)
+                    .createMessageReqBody(CreateMessageReqBody.newBuilder()
+                            .receiveId(userId)
+                            .msgType("text")
+                            .content("{\"text\":\"" + text + "\"}")
+                            .build())
+                    .build();
+
+            // 发起请求
+            CreateMessageResp resp = client.im().message().create(req);
+
+            // 处理服务端错误
+            if (!resp.success()) {
+                System.out.printf("code:%s,msg:%s,reqId:%s, resp:%s%n",
+                        resp.getCode(), resp.getMsg(), resp.getRequestId(),
+                        Jsons.createGSON(true, false).toJson(JsonParser
+                                .parseString(new String(resp.getRawResponse().getBody(), StandardCharsets.UTF_8))));
+                return;
+            }
+
+            // 业务数据处理
+            System.out.println(Jsons.DEFAULT.toJson(resp.getData()));
+        } catch (Exception e) {
+            log.error("消息发送异常", e);
+        }
+
+    }
+    /**
+     * 查询飞书多维表格
+     * @param
+     * @throws Exception
+     */
+    public static AppTableRecord queryOneRecord(String appToken,String tableToken,String fieldName,String fieldvalue) {
+        // 构建client
+        Client client = Client.newBuilder(APP_ID, APP_SECRET).build();
+
+        // 创建请求对象
+        SearchAppTableRecordReq req = SearchAppTableRecordReq.newBuilder()
+                .appToken(appToken)
+                .tableId(tableToken)
+                .pageSize(1)
+                .searchAppTableRecordReqBody(SearchAppTableRecordReqBody.newBuilder()
+                        .filter(FilterInfo.newBuilder()
+                                .conjunction("and")
+                                .conditions(new Condition[] {
+                                        Condition.newBuilder()
+                                                .fieldName(fieldName)
+                                                .operator("is")
+                                                .value(new String[] {
+                                                        fieldvalue
+                                                })
+                                                .build()
+                                })
+                                .build())
+                        .automaticFields(false)
+                        .build())
+                .build();
+
+        // 发起请求
+        try {
+            SearchAppTableRecordResp resp = client.bitable().v1().appTableRecord().search(req);
+
+            // 处理服务端错误
+            if (!resp.success()) {
+                System.out.println(String.format("code:%s,msg:%s,reqId:%s, resp:%s",
+                        resp.getCode(), resp.getMsg(), resp.getRequestId(), new String(resp.getRawResponse().getBody(), StandardCharsets.UTF_8)));
+                return null;
+            }
+
+            // 业务数据处理
+            if(resp.getData().getItems().length>0){
+                return resp.getData().getItems()[0];
+
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

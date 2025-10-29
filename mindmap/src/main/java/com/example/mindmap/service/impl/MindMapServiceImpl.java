@@ -403,6 +403,8 @@ public class MindMapServiceImpl implements MindMapService {
         entity.setParentId(parentId);
         // 新增映射：AI 创建标记
         entity.setIsAiGenerated(dto.getIsAiGenerated());
+        // 新增映射：CSS样式
+        entity.setCssStyle(dto.getCssStyle());
         return entity;
     }
 
@@ -667,6 +669,9 @@ public class MindMapServiceImpl implements MindMapService {
         if (request.getHasStrikethrough() != null) {
             node.setHasStrikethrough(request.getHasStrikethrough());
         }
+        if (request.getCssStyle() != null) {
+            node.setCssStyle(request.getCssStyle());
+        }
 
         mindMapNodeMapper.updateById(node);
 
@@ -749,6 +754,21 @@ public class MindMapServiceImpl implements MindMapService {
             newDto.setChildren(copiedChildrenDtos);
         }
         return newDto;
+    }
+
+    @Override
+    @Transactional
+    public MindMapNode updateNodeCssStyle(Long nodeId, String cssStyle) {
+        if (nodeId == null) {
+            throw new InvalidOperationException("Node ID cannot be null");
+        }
+        MindMapNode node = mindMapNodeMapper.selectById(nodeId);
+        if (node == null) {
+            throw new ResourceNotFoundException("Node not found with ID: " + nodeId);
+        }
+        node.setCssStyle(cssStyle); // CSS样式可以为空或null
+        mindMapNodeMapper.updateById(node);
+        return node;
     }
 
     /**

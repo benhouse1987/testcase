@@ -25,4 +25,6 @@ public class UpdateNodeRequest {
     private Boolean isExpanded;
 
     private Boolean hasStrikethrough;
+
+    private String cssStyle;
 }

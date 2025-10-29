@@ -286,3 +286,17 @@ databaseChangeLog:
             columns:
               - column:
                   name: backup_time
+  - changeSet:
+      id: 6
+      author: jules
+      comment: "Add css_style column to mind_map_node table for storing node styling information"
+      changes:
+        - addColumn:
+            tableName: mind_map_node
+            columns:
+              - column:
+                  name: css_style
+                  type: VARCHAR(4000)
+                  constraints:
+                    nullable: true
+                  remarks: "Stores CSS styling information for the node, max length 4000 characters"

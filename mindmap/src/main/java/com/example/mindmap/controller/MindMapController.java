@@ -3,13 +3,16 @@ package com.example.mindmap.controller;
 import com.example.mindmap.entity.MindMapNode;
 import com.example.mindmap.service.MindMapService;
 import com.example.mindmap.utils.ThirdPartyAPITool;
+import com.google.gson.internal.LinkedTreeMap;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+// Added
+// Added
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PutMapping; // Added
-import org.springframework.web.bind.annotation.PathVariable; // Added
+
 import com.example.mindmap.dto.BatchCreateNodeDto;
 import com.example.mindmap.dto.RequirementInputDto; // New DTO
 import com.example.mindmap.dto.UpdateNodeRequest; // Added
@@ -19,8 +22,12 @@ import org.slf4j.LoggerFactory; // SLF4J LoggerFactory
 import com.example.mindmap.exception.InvalidOperationException; // Added
 import com.example.mindmap.exception.ResourceNotFoundException; // Added
 
+import java.util.ArrayList;
 import java.util.List;
 import com.example.mindmap.dto.MindMapNodeDto;
+import  com.lark.oapi.service.bitable.v1.model.AppTableRecord;
+
+import liquibase.pro.packaged.is;
 
 @RestController
 @RequestMapping("/api/mindmap")
@@ -179,7 +186,7 @@ public class MindMapController {
         logger.debug("Full request payload: {}", requirementInputDto); // Logs the full DTO, requires toString() in DTO
                                                                        // or use ObjectMapper
 
-        genTestCase(requirementInputDto.getDocToken(),requirementInputDto.getRequirementId(),requirementInputDto.getRequirementTitle());
+        genTestCase(requirementInputDto.getDocToken(),requirementInputDto.getRequirementId(),requirementInputDto.getRequirementTitle(),null);
         return ResponseEntity.status(HttpStatus.CREATED).build();       
     }
 
@@ -212,6 +219,26 @@ public class MindMapController {
         return mindMapService.updateNode(id, request);
     }
 
+    // Update a node's CSS style
+    // PUT /api/mindmap/nodes/{nodeId}/css-style
+    @PutMapping("/nodes/{nodeId}/css-style")
+    public ResponseEntity<MindMapNode> updateNodeCssStyle(@PathVariable Long nodeId,
+            @RequestBody(required = false) String cssStyle) {
+        try {
+            MindMapNode updatedNode = mindMapService.updateNodeCssStyle(nodeId, cssStyle);
+            return ResponseEntity.ok(updatedNode);
+        } catch (ResourceNotFoundException e) {
+            logger.warn("Node not found for CSS style update: nodeId={}, message={}", nodeId, e.getMessage());
+            return ResponseEntity.notFound().build();
+        } catch (InvalidOperationException e) {
+            logger.warn("Invalid operation for CSS style update: nodeId={}, message={}", nodeId, e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            logger.error("Unexpected error while updating CSS style for node {}: {}", nodeId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PostMapping("/nodes/{sourceNodeId}/copy-to/{targetParentNodeId}")
     public ResponseEntity<MindMapNodeDto> copyNode(
             @PathVariable Long sourceNodeId,
@@ -239,27 +266,47 @@ public class MindMapController {
 
     @GetMapping("/genTestCase")
     @ResponseBody
-    public void genTestCase(@RequestParam String docToken, String rdcNumber, String title) {
-        // 对title参数进行URL解码
-        try {
-            // 对URL编码的字符串进行两次解码,先解码%编码,再解码Unicode编码
-            String encodedTitle = java.net.URLDecoder.decode(title, "UTF-8");
-            title = java.net.URLDecoder.decode(encodedTitle, "UTF-8");
-        } catch (java.io.UnsupportedEncodingException e) {
-            log.error("URL解码失败: {}", e.getMessage());
+    public void genTestCase(@RequestParam String docToken, String rdcNumber, String title,String issueId) {
+        
+        String realDocToken=docToken;
+        if(issueId!=null){
+            //尝试查找issue的 doc token
+               AppTableRecord appTableRecord =ThirdPartyAPITool.queryOneRecord("X8V5btLKzasYh1sIkgAc1Q7GnwZ",
+                "tbl1iyEvPYXk4IJn",
+                "需求编号", issueId);
+
+                     if (appTableRecord != null && appTableRecord.getFields().get("文档token") != null) {
+                                         realDocToken = ((LinkedTreeMap) ((ArrayList) appTableRecord.getFields()
+                                                .get("文档token")).get(0))
+                                                .get("text").toString();
+
+                     }
+
+
         }
+        
+        String doc = ThirdPartyAPITool.getDocContent(realDocToken);
+
+        title = doc.substring(12,doc.indexOf("\\n"));
+
         log.info("重新生成脑图 {}", title);
         
         // 先按照Rdcnumber删除表内数据（独立事务）
         log.info("开始删除需求ID为 {} 的现有数据", rdcNumber);
+        List<MindMapNodeDto> mindMapNodes =  mindMapService.getMindMapByRequirementId(issueId);
+        if(mindMapNodes.get(0).getChildren().size()>3){
+            //正在重新生成脑图，发送通知
+            ThirdPartyAPITool.sendMessage("on_c9f44b8c4031c49db9189896b6d134f3", "需求  "+title+" 的脑图正在重新生成中", "union_id");      
+
+        }
+
         mindMapService.deleteNodesByRequirementId(rdcNumber);
         
         RequirementInputDto testCaseRequestDTO = new RequirementInputDto();
         testCaseRequestDTO.setRequirementId(rdcNumber);
         testCaseRequestDTO.setRequirementTitle(title);
-        testCaseRequestDTO.setDocToken(docToken);
+        testCaseRequestDTO.setDocToken(realDocToken);
 
-        String doc = ThirdPartyAPITool.getDocContent(docToken);
 
         log.info("获取到了需求原文 {} {}", title, doc);
         //尝试去掉背景等描述

@@ -33,4 +33,7 @@ public interface MindMapService {
     MindMapNodeDto updateNode(Long id, UpdateNodeRequest request); // Added
 
     MindMapNodeDto copyNodeAndChildren(Long sourceNodeId, Long targetParentNodeId);
+
+    // CSS样式相关方法
+    MindMapNode updateNodeCssStyle(Long nodeId, String cssStyle);
 }
