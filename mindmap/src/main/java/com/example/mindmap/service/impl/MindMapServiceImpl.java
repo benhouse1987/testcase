@@ -518,9 +518,9 @@ public class MindMapServiceImpl implements MindMapService {
         logger.info("总共生成 {} 个测试用例", totalTestCases);
 
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
-        rootBatchDto.setDescription( requirementInputDto.getSprintCode()+"-"+requirementInputDto.getRequirementTitle());
+        rootBatchDto.setDescription( requirementInputDto.getRequirementTitle());
         rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
-        rootBatchDto.setRemarks("<a href=\"https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"\">https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"</a>"+"生成时间"+ java.time.LocalDateTime.now());
+        rootBatchDto.setRemarks("<a href=\"https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"\">https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"</a>"+"生成时间 "+ java.time.LocalDateTime.now());
         // Set other root node properties if necessary, e.g., status
         rootBatchDto.setStatus(NodeStatus.PENDING_TEST); // Default status
         // 新增：AI 创建标记
