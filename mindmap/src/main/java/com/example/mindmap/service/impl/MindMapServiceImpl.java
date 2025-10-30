@@ -492,7 +492,7 @@ public class MindMapServiceImpl implements MindMapService {
         String userPromptPrefix = "Based on the following analyzed functional points, generate detailed test cases as per the specified JSON structure. " +
                                   "Divide the functional points into multiple distinct functional test object names. " +
                                   "For each functional point, write corresponding test cases. " +
-                                  "Provide as many diverse test cases as possible without repetition of the same validation type. " +
+                                //   "Provide as many diverse test cases as possible without repetition of the same validation type. " +
                                 //   "The 'quotedRequirementText' should be extracted carefully from the analyzed content provided below, " +
                                 //   "including approximately 80 characters before and 80 characters after the key segment, using '...' for omitted parts,analyzed content 使用html的加粗格式." +
                 "生成测试用例的时候，注意忽略需求中的背景，不要为需求背景生成用例;用例描述需要简洁，" +
@@ -520,7 +520,7 @@ public class MindMapServiceImpl implements MindMapService {
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
         rootBatchDto.setDescription( requirementInputDto.getRequirementTitle());
         rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
-        rootBatchDto.setRemarks("<a href=\"https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"\">https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"</a>"+"生成时间 "+ java.time.LocalDateTime.now());
+        rootBatchDto.setRemarks("<a href=\"https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"\" target=\"_blank\">https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"</a><p>  生成时间："+ java.time.LocalDateTime.now()+"</p>");
         // Set other root node properties if necessary, e.g., status
         rootBatchDto.setStatus(NodeStatus.PENDING_TEST); // Default status
         // 新增：AI 创建标记
