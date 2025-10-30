@@ -28,13 +28,15 @@ public class MindMapNodeDto {
     private Integer isAiGenerated;
     // CSS样式字符串，用于存储节点的样式信息
     private String cssStyle;
+    // Sprint代码，字符串类型，最大20字符
+    private String sprintCode;
     private List<MindMapNodeDto> children = new ArrayList<>();
 
     // Consider a constructor to map from MindMapNode entity if needed, or use a mapping library
     public MindMapNodeDto(Long id, Long parentId, String description, String remarks, String requirementId,
                           String backendDeveloper, String frontendDeveloper, String tester,
                           String requirementReference, NodeStatus status, Boolean isExpanded, Boolean hasStrikethrough,
-                          LocalDateTime createdAt, Integer isAiGenerated, String cssStyle) { // Updated constructor
+                          LocalDateTime createdAt, Integer isAiGenerated, String cssStyle, String sprintCode) { // Updated constructor
         this.id = id;
         this.parentId = parentId;
         this.description = description;
@@ -50,5 +52,6 @@ public class MindMapNodeDto {
         this.createdAt = createdAt; // Added
         this.isAiGenerated = isAiGenerated; // Added
         this.cssStyle = cssStyle; // Added
+        this.sprintCode = sprintCode; // Added
     }
 }

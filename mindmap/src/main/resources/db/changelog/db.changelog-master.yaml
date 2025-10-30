@@ -300,3 +300,31 @@ databaseChangeLog:
                   constraints:
                     nullable: true
                   remarks: "Stores CSS styling information for the node, max length 4000 characters"
+  - changeSet:
+      id: 7
+      author: jules
+      comment: "Add sprint_code column to mind_map_node table for storing sprint code information"
+      changes:
+        - addColumn:
+            tableName: mind_map_node
+            columns:
+              - column:
+                  name: sprint_code
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: true
+                  remarks: "Sprint code field, max length 20 characters"
+  - changeSet:
+      id: 8
+      author: jules
+      comment: "Add sprint_code column to mind_map_node_bak table for storing sprint code information"
+      changes:
+        - addColumn:
+            tableName: mind_map_node_bak
+            columns:
+              - column:
+                  name: sprint_code
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: true
+                  remarks: "Sprint code field, max length 20 characters"

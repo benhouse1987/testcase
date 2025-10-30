@@ -405,6 +405,8 @@ public class MindMapServiceImpl implements MindMapService {
         entity.setIsAiGenerated(dto.getIsAiGenerated());
         // 新增映射：CSS样式
         entity.setCssStyle(dto.getCssStyle());
+        // 新增映射：Sprint代码
+        entity.setSprintCode(dto.getSprintCode());
         return entity;
     }
 
@@ -516,14 +518,15 @@ public class MindMapServiceImpl implements MindMapService {
         logger.info("总共生成 {} 个测试用例", totalTestCases);
 
         BatchCreateNodeDto rootBatchDto = new BatchCreateNodeDto();
-        rootBatchDto.setDescription( requirementInputDto.getRequirementId() + " " + requirementInputDto.getRequirementTitle());
+        rootBatchDto.setDescription( requirementInputDto.getSprintCode()+"-"+requirementInputDto.getRequirementTitle());
         rootBatchDto.setRequirementId(requirementInputDto.getRequirementId());
-        rootBatchDto.setRemarks(requirementInputDto.getDocToken());
+        rootBatchDto.setRemarks("<a href=\"https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"\">https://blxv28dmue.feishu.cn/docx/"+requirementInputDto.getDocToken()+"</a>"+"生成时间"+ java.time.LocalDateTime.now());
         // Set other root node properties if necessary, e.g., status
         rootBatchDto.setStatus(NodeStatus.PENDING_TEST); // Default status
         // 新增：AI 创建标记
         rootBatchDto.setIsAiGenerated(1);
-
+        // 新增：设置Sprint代码
+        rootBatchDto.setSprintCode(requirementInputDto.getSprintCode());
 
         List<BatchCreateNodeDto> firstLevelChildren = new ArrayList<>();
         int testCaseId=0;
@@ -537,7 +540,8 @@ public class MindMapServiceImpl implements MindMapService {
             fpNodeDto.setStatus(NodeStatus.PENDING_TEST); // Default status
             // 新增：AI 创建标记
             fpNodeDto.setIsAiGenerated(1);
-
+            // 新增：设置Sprint代码
+            fpNodeDto.setSprintCode(requirementInputDto.getSprintCode());
 
             List<BatchCreateNodeDto> secondLevelChildren = new ArrayList<>();
             if (fpDto.getTestScenarios() != null) {
@@ -552,7 +556,8 @@ public class MindMapServiceImpl implements MindMapService {
                     scenarioNodeDto.setStatus(NodeStatus.PENDING_TEST); // Default status
                     // 新增：AI 创建标记
                     scenarioNodeDto.setIsAiGenerated(1);
-                    
+                    // 新增：设置Sprint代码
+                    scenarioNodeDto.setSprintCode(requirementInputDto.getSprintCode());
                    
                     secondLevelChildren.add(scenarioNodeDto);
                 }
@@ -671,6 +676,9 @@ public class MindMapServiceImpl implements MindMapService {
         }
         if (request.getCssStyle() != null) {
             node.setCssStyle(request.getCssStyle());
+        }
+        if (request.getSprintCode() != null) {
+            node.setSprintCode(request.getSprintCode());
         }
 
         mindMapNodeMapper.updateById(node);

@@ -57,4 +57,7 @@ public class MindMapNode {
 
     // CSS样式字符串，用于存储节点的样式信息，最大长度4000字符
     private String cssStyle;
+
+    // Sprint代码，字符串类型，最大20字符
+    private String sprintCode;
 }

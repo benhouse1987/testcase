@@ -27,4 +27,7 @@ public class UpdateNodeRequest {
     private Boolean hasStrikethrough;
 
     private String cssStyle;
+
+    // Sprint代码，字符串类型，最大20字符
+    private String sprintCode;
 }

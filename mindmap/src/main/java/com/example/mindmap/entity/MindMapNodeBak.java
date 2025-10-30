@@ -41,4 +41,7 @@ public class MindMapNodeBak {
     private boolean hasStrikethrough = false;
 
     private LocalDateTime backupTime;
+
+    // Sprint代码，字符串类型，最大20字符
+    private String sprintCode;
 }

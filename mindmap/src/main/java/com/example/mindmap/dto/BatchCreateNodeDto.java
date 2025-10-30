@@ -34,6 +34,9 @@ public class BatchCreateNodeDto {
     // CSS样式字符串，用于存储节点的样式信息
     private String cssStyle;
 
+    // Sprint代码，字符串类型，最大20字符
+    private String sprintCode;
+
     private List<BatchCreateNodeDto> children = new ArrayList<>();
 
     // Constructor to initialize children - though @Data and @NoArgsConstructor might be enough,

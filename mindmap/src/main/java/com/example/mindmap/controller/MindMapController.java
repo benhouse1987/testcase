@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-// Added
-// Added
 import org.springframework.web.bind.annotation.*;
 
 import com.example.mindmap.dto.BatchCreateNodeDto;
@@ -24,6 +22,8 @@ import com.example.mindmap.exception.ResourceNotFoundException; // Added
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import com.example.mindmap.dto.MindMapNodeDto;
 import  com.lark.oapi.service.bitable.v1.model.AppTableRecord;
 
@@ -35,6 +35,9 @@ import liquibase.pro.packaged.is;
 public class MindMapController {
 
     private static final Logger logger = LoggerFactory.getLogger(MindMapController.class); // SLF4J Logger instance
+    
+    // 用于维护正在处理中的rdcNumber的并发安全Set
+    private static final Set<String> processingRdcNumbers = ConcurrentHashMap.newKeySet();
 
     @Autowired
     private MindMapService mindMapService;
@@ -186,7 +189,7 @@ public class MindMapController {
         logger.debug("Full request payload: {}", requirementInputDto); // Logs the full DTO, requires toString() in DTO
                                                                        // or use ObjectMapper
 
-        genTestCase(requirementInputDto.getDocToken(),requirementInputDto.getRequirementId(),requirementInputDto.getRequirementTitle(),null);
+        genTestCase(requirementInputDto.getDocToken(),requirementInputDto.getRequirementId(),null);
         return ResponseEntity.status(HttpStatus.CREATED).build();       
     }
 
@@ -266,55 +269,89 @@ public class MindMapController {
 
     @GetMapping("/genTestCase")
     @ResponseBody
-    public void genTestCase(@RequestParam String docToken, String rdcNumber, String title,String issueId) {
+    public ResponseEntity<String> genTestCase(@RequestParam(required = false) String docToken,@RequestParam String rdcNumber,@RequestParam(required = false) String testMode) {
         
-        String realDocToken=docToken;
-        if(issueId!=null){
-            //尝试查找issue的 doc token
-               AppTableRecord appTableRecord =ThirdPartyAPITool.queryOneRecord("X8V5btLKzasYh1sIkgAc1Q7GnwZ",
-                "tbl1iyEvPYXk4IJn",
-                "需求编号", issueId);
-
-                     if (appTableRecord != null && appTableRecord.getFields().get("文档token") != null) {
-                                         realDocToken = ((LinkedTreeMap) ((ArrayList) appTableRecord.getFields()
-                                                .get("文档token")).get(0))
-                                                .get("text").toString();
-
-                     }
-
-
+        // 并发控制：检查rdcNumber是否正在处理中
+        if (rdcNumber != null && !processingRdcNumbers.add(rdcNumber)) {
+            log.warn("rdcNumber {} 的用例正在生成中，拒绝重复请求", rdcNumber);
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("rdcNumber " + rdcNumber + " 的用例正在生成中，请稍后再试");
         }
         
-        String doc = ThirdPartyAPITool.getDocContent(realDocToken);
+        try {
+            String realDocToken=docToken;
+            String sprintCode="";
+            if(rdcNumber!=null){
+                //尝试查找issue的 doc token
+                   AppTableRecord appTableRecord =ThirdPartyAPITool.queryOneRecord("X8V5btLKzasYh1sIkgAc1Q7GnwZ",
+                    "tbl1iyEvPYXk4IJn",
+                    "需求编号", rdcNumber);
 
-        title = doc.substring(12,doc.indexOf("\\n"));
+                         if (appTableRecord != null && appTableRecord.getFields().get("文档token") != null) {
+                                             realDocToken = ((LinkedTreeMap) ((ArrayList) appTableRecord.getFields()
+                                                    .get("文档token")).get(0))
+                                                    .get("text").toString();
+                                              sprintCode=((LinkedTreeMap) ((ArrayList) appTableRecord.getFields()
+                                                    .get("迭代编码")).get(0))
+                                                    .get("text").toString();
 
-        log.info("重新生成脑图 {}", title);
-        
-        // 先按照Rdcnumber删除表内数据（独立事务）
-        log.info("开始删除需求ID为 {} 的现有数据", rdcNumber);
-        List<MindMapNodeDto> mindMapNodes =  mindMapService.getMindMapByRequirementId(issueId);
-        if(mindMapNodes.get(0).getChildren().size()>3){
-            //正在重新生成脑图，发送通知
-            ThirdPartyAPITool.sendMessage("on_c9f44b8c4031c49db9189896b6d134f3", "需求  "+title+" 的脑图正在重新生成中", "union_id");      
+                         }
 
+
+            }
+            
+            String doc = ThirdPartyAPITool.getDocContent(realDocToken);
+
+            String  title = doc.substring(12,doc.indexOf("\\n"));
+
+            log.info("重新生成脑图 {}", title);
+            
+            // 先按照Rdcnumber删除表内数据（独立事务）
+            log.info("开始删除需求ID为 {} 的现有数据", rdcNumber);
+            List<MindMapNodeDto> mindMapNodes =  mindMapService.getMindMapByRequirementId(rdcNumber);
+            if(mindMapNodes.size()>0 && mindMapNodes.get(0).getChildren().size()>0){
+                //正在重新生成脑图，发送通知
+                ThirdPartyAPITool.sendMessage("on_c9f44b8c4031c49db9189896b6d134f3", "需求  "+title+" 的脑图正在重新生成中", "union_id");      
+
+            }
+
+            RequirementInputDto testCaseRequestDTO = new RequirementInputDto();
+            testCaseRequestDTO.setRequirementId(rdcNumber);
+            testCaseRequestDTO.setRequirementTitle(title);
+            testCaseRequestDTO.setDocToken(realDocToken);
+            testCaseRequestDTO.setSprintCode(sprintCode);
+            if(!"Y".equals(testMode)){
+                mindMapService.deleteNodesByRequirementId(rdcNumber);
+            }else{
+                //测试模式，不删除原数据，刷新数据到test
+                mindMapService.deleteNodesByRequirementId("test");
+                testCaseRequestDTO.setRequirementId("test");
+            }
+
+
+
+            log.info("获取到了需求原文 {} {}", title, doc);
+            //尝试去掉背景等描述
+            if(doc.contains("功能逻辑")){
+                doc = doc.substring(doc.indexOf("功能逻辑"),doc.length()-1);
+            }
+            testCaseRequestDTO.setOriginalRequirementText(doc);
+            MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(testCaseRequestDTO);
+            
+            log.info("rdcNumber {} 的用例生成完成", rdcNumber);
+            return ResponseEntity.ok("用例生成完成");
+            
+        } catch (Exception e) {
+            log.error("rdcNumber {} 的用例生成过程中发生错误: {}", rdcNumber, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("用例生成过程中发生错误: " + e.getMessage());
+        } finally {
+            // 确保无论成功失败都从处理中的集合中移除rdcNumber
+            if (rdcNumber != null) {
+                processingRdcNumbers.remove(rdcNumber);
+                log.debug("已从处理队列中移除 rdcNumber: {}", rdcNumber);
+            }
         }
-
-        mindMapService.deleteNodesByRequirementId(rdcNumber);
-        
-        RequirementInputDto testCaseRequestDTO = new RequirementInputDto();
-        testCaseRequestDTO.setRequirementId(rdcNumber);
-        testCaseRequestDTO.setRequirementTitle(title);
-        testCaseRequestDTO.setDocToken(realDocToken);
-
-
-        log.info("获取到了需求原文 {} {}", title, doc);
-        //尝试去掉背景等描述
-        if(doc.contains("功能逻辑")){
-            doc = doc.substring(doc.indexOf("功能逻辑"),doc.length()-1);
-        }
-        testCaseRequestDTO.setOriginalRequirementText(doc);
-        MindMapNodeDto mindMapRootNode = mindMapService.generateTestCasesFromRequirement(testCaseRequestDTO);
 
     }
 

@@ -17,6 +17,9 @@ public class RequirementInputDto {
 
     private String analyzedContent; // 存储大模型分析后的功能点内容
 
+    // Sprint代码，字符串类型，最大20字符
+    private String sprintCode;
+
     // Constructors, Getters, and Setters (or use Lombok @Data)
     public RequirementInputDto() {}
 
@@ -47,5 +50,13 @@ public class RequirementInputDto {
 
     public void setAnalyzedContent(String analyzedContent) {
         this.analyzedContent = analyzedContent;
+    }
+
+    public String getSprintCode() {
+        return sprintCode;
+    }
+
+    public void setSprintCode(String sprintCode) {
+        this.sprintCode = sprintCode;
     }
 }
